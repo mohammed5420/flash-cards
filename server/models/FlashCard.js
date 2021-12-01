@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const flashCardSchema = mongoose.Schema({
     author: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: String,
         required: true
     },
     frontside: {
@@ -19,4 +19,4 @@ const flashCardSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("cards",flashCardSchema);
+module.exports = mongoose.model("card",flashCardSchema);

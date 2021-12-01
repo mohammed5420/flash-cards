@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const mongoose = require("./db.config");
 const flashCardRoutes = require("./routes/Cards");
-require("./routes/Auth");
+const authRoutes = require("./routes/Auth");
+require("./db.config");
 require("dotenv").config();
 
 //Middlewares
@@ -14,15 +14,15 @@ app.use(
 );
 
 //API Routes
-app.use("/users",authRoutes);
-app.use("/flashcards",flashCardRoutes);
+app.use("/users", authRoutes);
+app.use("/flashcards", flashCardRoutes);
 
-app.get("/flashcards/api/v1/", (req , res) => {
-    res.send("please make sure you are authentifecated");
+app.get("/flashcards/api/v1/", (req, res) => {
+  res.send("please make sure you are authentifecated");
 });
 
 const port = process.env.PORT || 3300;
 
 app.listen(port, () => {
-    console.log("server runing on port 3300");
-})
+  console.log("server runing on port 3300");
+});
