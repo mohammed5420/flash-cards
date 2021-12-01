@@ -39,4 +39,6 @@ routes.delete("/delete/:card_id",(req,res) => {
 
 });
 
+module.exports = routes;
+
 

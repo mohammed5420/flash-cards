@@ -1,10 +1,12 @@
 const app = require("express")();
+const mongoose = require("./db.config");
+const authRoutes = require("./routes/Auth");
+const flashCardRoutes = require("./routes/Cards");
 require("dotenv").config();
-const mongoose = require("mongoose");
 
-mongoose.connect(process.env.CONNECTION_STRING,() => {
-    console.log("connected to mongoooo!");
-});
+//API Routes
+app.use("/users",authRoutes);
+app.use("/flashcards",flashCardRoutes);
 
 app.get("/flashcards/api/v1/", (req , res) => {
     res.send("please make sure you are authentifecated");

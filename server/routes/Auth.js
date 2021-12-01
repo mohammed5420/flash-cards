@@ -48,3 +48,4 @@ routes.post("/reset-password", (req,res) => {
 
 });
 
+module.exports = routes;
