@@ -8,6 +8,7 @@
 
 # testing
 /coverage
+/server/*.rest
 
 # production
 /build
@@ -15,6 +16,11 @@
 # misc
 .DS_Store
 .env.local
+/server/.env
+/server/.env.development.local
+/server/.env.local
+/server/.env.test.local
+/server/.env.production.local
 .env.development.local
 .env.test.local
 .env.production.local

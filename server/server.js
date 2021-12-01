@@ -1,8 +1,17 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const mongoose = require("./db.config");
-const authRoutes = require("./routes/Auth");
 const flashCardRoutes = require("./routes/Cards");
+require("./routes/Auth");
 require("dotenv").config();
+
+//Middlewares
+app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 //API Routes
 app.use("/users",authRoutes);
