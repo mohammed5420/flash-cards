@@ -9,18 +9,8 @@ const signupSchema = Joi.object({
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().email().required().label("email").messages({
-    "string.base": `email should be a type of 'text'`,
-    "string.empty": `please enter your email`,
-    "string.email": `email is not valid email`,
-    "any.required": `email is a required field`,
-  }),
-  password: Joi.string().required().label("password").messages({
-    "string.base": `password should be a type of 'text'`,
-    "string.empty": `please enter your password`,
-    "any.required": `password is a required field`,
-  }),
-  remeber_me: Joi.string(),
+  email: Joi.string().email().required().label("email"),
+  password: Joi.string().required().label("password"),
 });
 
 const emailSchema = Joi.string().email().required().label("email").messages({

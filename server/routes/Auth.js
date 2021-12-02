@@ -1,10 +1,11 @@
 const routes = require("express").Router();
 const User = require("./../models/User");
-const { singupFormValidatior } = require("./../validation");
+const { singupFormValidatior, loginFormValidator } = require("./../validation");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 /**
  * ### Auth Route
- * #### TODO: 1- Signup
+ * #### 1- Signup
  * #### 2- Login
  * #### 3- Logout
  * #### 4- Forget Password
@@ -45,7 +46,28 @@ routes.post("/signup", async (req, res) => {
  * Login user
  */
 
-routes.post("/login", (req, res) => {});
+routes.post("/login", async (req, res) => {
+  const { value, error } = loginFormValidator(req.body);
+
+  if (error) return res.json({ message: error.detail[0].message });
+
+  const isSigninEmail = await User.find(
+    { email: value.email },
+    { password: 1 }
+  );
+  if (isSigninEmail.length === 0)
+    return res.json({ message: "this email isn't registerd please signup" });
+  const hashedPassword = isSigninEmail[0].password;
+  if (!bcrypt.compareSync(value.password, hashedPassword))
+    return res.json({ message: "email or password isn't correct" });
+
+  const token = jwt.sign(
+    { _id: isSigninEmail[0]._id},
+    process.env.SECRETKEY,
+    { expiresIn: "30d" }
+  );
+  res.json({jwtToken: token});
+});
 
 /**
  * Logout user
