@@ -55,8 +55,8 @@ const singupFormValidatior = (formData) => {
 const loginFormValidator = (formData) => {
   return loginSchema.validate(formData);
 };
-
-const emailValidator = (email) => {
+  
+  const emailValidator = (email) => {
   return emailSchema.validate(email);
 };
 
