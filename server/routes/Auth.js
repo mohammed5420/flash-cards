@@ -49,7 +49,7 @@ routes.post("/signup", async (req, res) => {
 routes.post("/login", async (req, res) => {
   const { value, error } = loginFormValidator(req.body);
 
-  if (error) return res.json({ message: error.detail[0].message });
+  if (error) return res.json({ message: error.details[0].message });
 
   const isSigninEmail = await User.find(
     { email: value.email },

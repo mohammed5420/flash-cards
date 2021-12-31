@@ -49,6 +49,22 @@ const resetPasswordSchema = Joi.object({
   confirm_password: Joi.ref("new_password"),
 });
 
+const createFlashCardSchema = Joi.object({
+  author: Joi.string().min(6).required(),
+  frontside: Joi.string().required(),
+  backside: Joi.string().required(),
+});
+
+const updateFlashCardSchema = Joi.object({
+  _id: Joi.string().min(16).required(),
+  frontside: Joi.string(),
+  backside: Joi.string() 
+});
+
+const updateFlashCardValidator = (formData) => {
+  return updateFlashCardSchema.validate(formData);
+}
+ 
 const singupFormValidatior = (formData) => {
   return signupSchema.validate(formData);
 };
@@ -68,10 +84,16 @@ const resetPasswordValidator = (formData) => {
   return resetPasswordSchema.validate(formData);
 };
 
+const createFlashcardValidator = (formData) => {
+  return createFlashCardSchema.validate(formData);
+}
+
 module.exports = {
   singupFormValidatior,
   loginFormValidator,
   emailValidator,
   newPasswordValidator,
   resetPasswordValidator,
+  createFlashcardValidator,
+  updateFlashCardValidator
 };

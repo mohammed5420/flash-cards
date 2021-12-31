@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const flashCardSchema = mongoose.Schema({
     author: {
-        type: String,
+        type: String,     
         required: true
     },
     frontside: {

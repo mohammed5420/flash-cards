@@ -1,6 +1,10 @@
 const FlashCard = require("../models/FlashCard");
+const {
+  createFlashcardValidator,
+  updateFlashCardValidator,
+} = require("./../validation");
 /**
- * ### Flash Cards Routes
+ * ### TODO: Flash Cards Routes
  * #### 1- Get All flash cards
  * #### 2- Create new flash card
  * #### 3- Update flash card by card ID
@@ -26,11 +30,12 @@ routes.get("/", async (req, res) => {
  */
 
 routes.post("/create", async (req, res) => {
-  const card = new FlashCard({
-    author: req.body.author,
-    frontside: req.body.frontside,
-    backside: req.body.backside,
-  });
+  const { value, error } = createFlashcardValidator(req.body);
+  console.log(req.body, error);
+  if (error) {
+    return res.json({ message: error.details[0].message });
+  }
+  const card = new FlashCard(value);
   try {
     const savedCard = await card.save();
     res.json(savedCard);
@@ -44,28 +49,31 @@ routes.post("/create", async (req, res) => {
  */
 
 routes.patch("/update/:card_id", async (req, res) => {
+  const _id = req.params.card_id;
+  //check if card id param exist
+  if (!_id)
+    return req.json({ message: "you should pass card id as a prameter" });
+  //validate request body data
+  const { value, error } = updateFlashCardValidator({_id});
+
+  if (error) return res.json({ message: error.details[0].message });
+
   const createUpdateObject = (reqBody) => {
-    if (reqBody.frontside && reqBody.baskside) {
+    if (reqBody.frontside && reqBody.baskside)
       return {
         frontside: reqBody.frontside,
         backside: reqBody.backside,
       };
-    }
 
-    if (reqBody.frontside) {
-      return {
-        frontside: reqBody.frontside,
-      };
-    }
+    if (reqBody.frontside) return { frontside: reqBody.frontside };
 
-    if (reqBody.backside) {
-      return { backside: reqBody.backside };
-    }
+    if (reqBody.backside) return { backside: reqBody.backside };
+    return res.json({message: "please make sure you pass valid data"})
   };
-  console.log(createUpdateObject(req.body))
+
   try {
     const flashCards = await FlashCard.updateOne(
-      { _id: req.params.card_id },
+      { _id },
       { $set: createUpdateObject(req.body) }
     );
     res.json(flashCards);
@@ -77,8 +85,8 @@ routes.patch("/update/:card_id", async (req, res) => {
 /**
  * 4- Remove flash card by ID
  */
-
 routes.delete("/delete/:card_id", async (req, res) => {
+  //TODO: validate flashcard id
   try {
     const flashCards = await FlashCard.deleteOne({ _id: req.params.card_id });
     res.json(flashCards);
