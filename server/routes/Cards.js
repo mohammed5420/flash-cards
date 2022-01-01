@@ -1,4 +1,5 @@
 const FlashCard = require("../models/FlashCard");
+const verifyToken = require("./../middleware/verifyToken");
 const {
   createFlashcardValidator,
   updateFlashCardValidator,
@@ -29,7 +30,7 @@ routes.get("/", async (req, res) => {
  * 2- Create new flash card
  */
 
-routes.post("/create", async (req, res) => {
+routes.post("/create", verifyToken ,async (req, res) => {
   const { value, error } = createFlashcardValidator(req.body);
   console.log(req.body, error);
   if (error) {
@@ -48,7 +49,8 @@ routes.post("/create", async (req, res) => {
  * 3- Update flash card by card ID
  */
 
-routes.patch("/update/:card_id", async (req, res) => {
+routes.patch("/update/:card_id", verifyToken ,async (req, res) => {
+  console.log(req.user);
   const _id = req.params.card_id;
   //check if card id param exist
   if (!_id)
@@ -85,7 +87,7 @@ routes.patch("/update/:card_id", async (req, res) => {
 /**
  * 4- Remove flash card by ID
  */
-routes.delete("/delete/:card_id", async (req, res) => {
+routes.delete("/delete/:card_id", verifyToken , async (req, res) => {
   //TODO: validate flashcard id
   try {
     const flashCards = await FlashCard.deleteOne({ _id: req.params.card_id });

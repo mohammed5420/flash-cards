@@ -3,10 +3,11 @@ GET http://localhost:3300/flashcards HTTP/1.1
 ###
 
 POST http://localhost:3300/flashcards/create HTTP/1.1
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWQwYmM0YTE1OTAwOTg5ZmYzZDgwNDAiLCJpYXQiOjE2NDEwNjk4NjMsImV4cCI6MTY0MzY2MTg2M30.leVLbiCd2bL092329ks93M4luULoqvxjmPJLaotzVjQ
 Content-Type: application/json
 
 {
-    "author": "mohammed salah",
+    "author": "test salah",
     "frontside": "hello it's me mario",
     "backside": "what is up"
 }
@@ -14,6 +15,7 @@ Content-Type: application/json
 ###
 
 PATCH http://localhost:3300/flashcards/update/61cead257a1382022ed29c19
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWQwYmM0YTE1OTAwOTg5ZmYzZDgwNDAiLCJpYXQiOjE2NDEwNjk4NjMsImV4cCI6MTY0MzY2MTg2M30.leVLbiCd2bL092329ks93M4luULoqvxjmPJLaotzVjQ
 Content-Type: application/json
 
 {

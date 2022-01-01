@@ -1,0 +1,19 @@
+POST http://localhost:3300/users/signup HTTP/1.1
+Content-Type: application/json
+
+{
+    "userName": "mohammed salah",
+    "email": "moahmed@gmail.com",
+    "password": "spider.gamer",
+    "confirmPassword": "spider.gamer"
+}
+
+###
+
+POST http://localhost:3300/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "moahmed@gmail.com",
+    "password": "spider.gamer"
+}

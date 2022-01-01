@@ -18,6 +18,7 @@ const jwt = require("jsonwebtoken");
 routes.post("/signup", async (req, res) => {
   const { value, error } = singupFormValidatior(req.body);
   if (error) {
+    console.log(error)
     return res.json({ message: error.details[0].message });
   }
   if (value) {
@@ -48,7 +49,7 @@ routes.post("/signup", async (req, res) => {
 
 routes.post("/login", async (req, res) => {
   const { value, error } = loginFormValidator(req.body);
-
+  console.log(error)
   if (error) return res.json({ message: error.details[0].message });
 
   const isSigninEmail = await User.find(
