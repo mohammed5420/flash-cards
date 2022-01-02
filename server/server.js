@@ -5,7 +5,7 @@ const authRoutes = require("./routes/Auth");
 require("./db.config");
 require("dotenv").config();
 
-//Middlewares
+//Middleware
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -18,7 +18,7 @@ app.use("/users", authRoutes);
 app.use("/flashcards", flashCardRoutes);
 
 app.get("/flashcards/api/v1/", (req, res) => {
-  res.send("please make sure you are authentifecated");
+  res.send("please make sure you are authenticated");
 });
 
 const port = process.env.PORT || 3300;

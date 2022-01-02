@@ -65,7 +65,7 @@ const updateFlashCardValidator = (formData) => {
   return updateFlashCardSchema.validate(formData);
 }
  
-const singupFormValidatior = (formData) => {
+const signupFormValidator = (formData) => {
   return signupSchema.validate(formData);
 };
 const loginFormValidator = (formData) => {
@@ -89,7 +89,7 @@ const createFlashcardValidator = (formData) => {
 }
 
 module.exports = {
-  singupFormValidatior,
+  signupFormValidator,
   loginFormValidator,
   emailValidator,
   newPasswordValidator,

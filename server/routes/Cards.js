@@ -54,7 +54,7 @@ routes.patch("/update/:card_id", verifyToken ,async (req, res) => {
   const _id = req.params.card_id;
   //check if card id param exist
   if (!_id)
-    return req.json({ message: "you should pass card id as a prameter" });
+    return req.json({ message: "you should pass card id as a parameter" });
   //validate request body data
   const { value, error } = updateFlashCardValidator({_id});
 

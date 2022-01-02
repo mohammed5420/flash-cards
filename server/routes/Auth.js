@@ -1,6 +1,6 @@
 const routes = require("express").Router();
 const User = require("./../models/User");
-const { singupFormValidatior, loginFormValidator } = require("./../validation");
+const { signupFormValidator, loginFormValidator } = require("./../validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 /**
@@ -16,16 +16,16 @@ const jwt = require("jsonwebtoken");
  * Signup user
  */
 routes.post("/signup", async (req, res) => {
-  const { value, error } = singupFormValidatior(req.body);
+  const { value, error } = signupFormValidator(req.body);
   if (error) {
     console.log(error)
     return res.json({ message: error.details[0].message });
   }
   if (value) {
-    const isAllreadyUser = await User.find({ email: value.email });
-    console.log(isAllreadyUser);
-    if (isAllreadyUser.length !== 0)
-      return res.json({ message: "this email is allready registred" });
+    const isAlreadyUser = await User.find({ email: value.email });
+    console.log(isAlreadyUser);
+    if (isAlreadyUser.length !== 0)
+      return res.json({ message: "this email is already registerd" });
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(value.password, salt);
     const newUser = new User({
@@ -52,18 +52,18 @@ routes.post("/login", async (req, res) => {
   console.log(error)
   if (error) return res.json({ message: error.details[0].message });
 
-  const isSigninEmail = await User.find(
+  const isSignedEmail = await User.find(
     { email: value.email },
     { password: 1 }
   );
-  if (isSigninEmail.length === 0)
+  if (isSignedEmail.length === 0)
     return res.json({ message: "this email isn't registerd please signup" });
-  const hashedPassword = isSigninEmail[0].password;
+  const hashedPassword = isSignedEmail[0].password;
   if (!bcrypt.compareSync(value.password, hashedPassword))
     return res.json({ message: "email or password isn't correct" });
 
   const token = jwt.sign(
-    { _id: isSigninEmail[0]._id},
+    { _id: isSignedEmail[0]._id},
     process.env.SECRETKEY,
     { expiresIn: "30d" }
   );
@@ -74,7 +74,8 @@ routes.post("/login", async (req, res) => {
  * Logout user
  */
 
-routes.get("/logout", (req, res) => {});
+routes.get("/logout", (req, res) => {
+});
 
 /**
  * forget-password
