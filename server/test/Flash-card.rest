@@ -1,4 +1,5 @@
 GET http://localhost:3300/flashcards HTTP/1.1
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWQwYmM0YTE1OTAwOTg5ZmYzZDgwNDAiLCJpYXQiOjE2NDEwNjk4NjMsImV4cCI6MTY0MzY2MTg2M30.leVLbiCd2bL092329ks93M4luULoqvxjmPJLaotzVjQ
 
 ###
 
@@ -7,9 +8,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWQwYmM0Y
 Content-Type: application/json
 
 {
-    "author": "test salah",
-    "frontside": "hello it's me mario",
-    "backside": "what is up"
+    "frontSide": "hello it's me mario",
+    "backSide": "what is up"
 }
 
 ###
@@ -19,5 +19,5 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWQwYmM0Y
 Content-Type: application/json
 
 {
-    "frontside": "welcome every one it's me mario"
+    "frontSide": "welcome every one it's me mario"
 }

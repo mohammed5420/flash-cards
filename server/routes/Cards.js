@@ -17,9 +17,10 @@ const routes = require("express").Router();
 /**
  * 1- Fetch All user Flash cards
  */
-routes.get("/", async (req, res) => {
+routes.get("/", verifyToken, async (req, res) => {
+  const {_id} = req.user;
   try {
-    const flashCards = await FlashCard.find();
+    const flashCards = await FlashCard.find({authorID: _id});
     res.json(flashCards);
   } catch (err) {
     res.json({ message: err.message });
@@ -32,11 +33,16 @@ routes.get("/", async (req, res) => {
 
 routes.post("/create", verifyToken ,async (req, res) => {
   const { value, error } = createFlashcardValidator(req.body);
-  console.log(req.body, error);
+  const {_id} = req.user;
+  
   if (error) {
     return res.json({ message: error.details[0].message });
   }
-  const card = new FlashCard(value);
+  const card = new FlashCard({
+    authorID: _id,
+    frontSide: value.frontSide,
+    backSide: value.backSide
+  });
   try {
     const savedCard = await card.save();
     res.json(savedCard);
@@ -61,15 +67,15 @@ routes.patch("/update/:card_id", verifyToken ,async (req, res) => {
   if (error) return res.json({ message: error.details[0].message });
 
   const createUpdateObject = (reqBody) => {
-    if (reqBody.frontside && reqBody.baskside)
+    if (reqBody.frontSide && reqBody.backSide)
       return {
-        frontside: reqBody.frontside,
-        backside: reqBody.backside,
+        frontSide: reqBody.frontSide,
+        backSide: reqBody.backSide,
       };
 
-    if (reqBody.frontside) return { frontside: reqBody.frontside };
+    if (reqBody.frontSide) return { frontSide: reqBody.frontSide };
 
-    if (reqBody.backside) return { backside: reqBody.backside };
+    if (reqBody.backSide) return { backSide: reqBody.backSide };
     return res.json({message: "please make sure you pass valid data"})
   };
 

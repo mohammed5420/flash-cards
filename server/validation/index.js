@@ -50,15 +50,13 @@ const resetPasswordSchema = Joi.object({
 });
 
 const createFlashCardSchema = Joi.object({
-  author: Joi.string().min(6).required(),
-  frontside: Joi.string().required(),
-  backside: Joi.string().required(),
+  frontSide: Joi.string().required(),
+  backSide: Joi.string().required(),
 });
 
 const updateFlashCardSchema = Joi.object({
-  _id: Joi.string().min(16).required(),
-  frontside: Joi.string(),
-  backside: Joi.string() 
+  frontSide: Joi.string(),
+  backSide: Joi.string() 
 });
 
 const updateFlashCardValidator = (formData) => {

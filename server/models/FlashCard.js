@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 
 const flashCardSchema = mongoose.Schema({
-    author: {
-        type: String,     
-        required: true
+    authorID: {
+        type: mongoose.SchemaTypes.ObjectId,     
+        required: true,
+        ref: "users"
     },
-    frontside: {
+    frontSide: {
         type: String,
         required: true,
     },
-    backside: {
+    backSide: {
         type: String,
         required: true,
     },
