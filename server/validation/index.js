@@ -52,38 +52,65 @@ const resetPasswordSchema = Joi.object({
 const createFlashCardSchema = Joi.object({
   frontSide: Joi.string().required(),
   backSide: Joi.string().required(),
+  colorPalette: {
+    frontSide: Joi.string().required(),
+    backSide: Joi.string().required()
+  },
+  isFavorite: Joi.boolean()
 });
 
 const updateFlashCardSchema = Joi.object({
   frontSide: Joi.string(),
-  backSide: Joi.string() 
+  backSide: Joi.string(),
+  colorPalette: {
+    frontSide: Joi.string(),
+    backSide: Joi.string()
+  },
+  isFavorite: Joi.boolean()
 });
 
-const updateFlashCardValidator = (formData) => {
-  return updateFlashCardSchema.validate(formData);
-}
- 
-const signupFormValidator = (formData) => {
-  return signupSchema.validate(formData);
+const IDSchema = Joi.object({
+  _id: Joi.string().min(12).required(),
+});
+
+const favoriteCardSchema = Joi.object({
+  _id: Joi.string().min(12).required(),
+  isFavorite: Joi.boolean().required()
+})
+
+const updateFlashCardValidator = (requestBody) => {
+  return updateFlashCardSchema.validate(requestBody);
 };
-const loginFormValidator = (formData) => {
-  return loginSchema.validate(formData);
+
+const IDValidator = (requestBody) => {
+  return IDSchema.validate(requestBody);
 };
-  
-  const emailValidator = (email) => {
+
+const signupFormValidator = (requestBody) => {
+  return signupSchema.validate(requestBody);
+};
+const loginFormValidator = (requestBody) => {
+  return loginSchema.validate(requestBody);
+};
+
+const emailValidator = (email) => {
   return emailSchema.validate(email);
 };
 
-const newPasswordValidator = (formData) => {
-  return newPasswordSchema.validate(formData);
+const newPasswordValidator = (requestBody) => {
+  return newPasswordSchema.validate(requestBody);
 };
 
-const resetPasswordValidator = (formData) => {
-  return resetPasswordSchema.validate(formData);
+const resetPasswordValidator = (requestBody) => {
+  return resetPasswordSchema.validate(requestBody);
 };
 
-const createFlashcardValidator = (formData) => {
-  return createFlashCardSchema.validate(formData);
+const createFlashcardValidator = (requestBody) => {
+  return createFlashCardSchema.validate(requestBody);
+};
+
+const isFavoriteCardValidator = (requestBody) => {
+  return favoriteCardSchema.validate(requestBody);
 }
 
 module.exports = {
@@ -93,5 +120,7 @@ module.exports = {
   newPasswordValidator,
   resetPasswordValidator,
   createFlashcardValidator,
-  updateFlashCardValidator
+  updateFlashCardValidator,
+  IDValidator,
+  isFavoriteCardValidator
 };

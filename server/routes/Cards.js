@@ -3,6 +3,8 @@ const verifyToken = require("./../middleware/verifyToken");
 const {
   createFlashcardValidator,
   updateFlashCardValidator,
+  IDValidator,
+  isFavoriteCardValidator,
 } = require("./../validation");
 /**
  * ### TODO: Flash Cards Routes
@@ -10,17 +12,18 @@ const {
  * #### 2- Create new flash card
  * #### 3- Update flash card by card ID
  * #### 4- Delete flash card by card ID
+ * #### 5- Create favorite cards route
  */
 
 const routes = require("express").Router();
 
 /**
- * 1- Fetch All user Flash cards
+ * Fetch All user Flash cards
  */
 routes.get("/", verifyToken, async (req, res) => {
-  const {_id} = req.user;
+  const { _id } = req.user;
   try {
-    const flashCards = await FlashCard.find({authorID: _id});
+    const flashCards = await FlashCard.find({ authorID: _id });
     res.json(flashCards);
   } catch (err) {
     res.json({ message: err.message });
@@ -28,20 +31,20 @@ routes.get("/", verifyToken, async (req, res) => {
 });
 
 /**
- * 2- Create new flash card
+ * Create new flash card
  */
 
-routes.post("/create", verifyToken ,async (req, res) => {
+routes.post("/create", verifyToken, async (req, res) => {
   const { value, error } = createFlashcardValidator(req.body);
-  const {_id} = req.user;
-  
+  const { _id } = req.user;
+
   if (error) {
     return res.json({ message: error.details[0].message });
   }
   const card = new FlashCard({
     authorID: _id,
     frontSide: value.frontSide,
-    backSide: value.backSide
+    backSide: value.backSide,
   });
   try {
     const savedCard = await card.save();
@@ -52,38 +55,22 @@ routes.post("/create", verifyToken ,async (req, res) => {
 });
 
 /**
- * 3- Update flash card by card ID
+ * Update flash card by card ID
  */
 
-routes.patch("/update/:card_id", verifyToken ,async (req, res) => {
-  console.log(req.user);
+routes.patch("/update/:card_id", verifyToken, async (req, res) => {
   const _id = req.params.card_id;
   //check if card id param exist
   if (!_id)
     return req.json({ message: "you should pass card id as a parameter" });
   //validate request body data
-  const { value, error } = updateFlashCardValidator({_id});
+  const { value, error } = updateFlashCardValidator(req.body);
+  console.log(error);
 
   if (error) return res.json({ message: error.details[0].message });
 
-  const createUpdateObject = (reqBody) => {
-    if (reqBody.frontSide && reqBody.backSide)
-      return {
-        frontSide: reqBody.frontSide,
-        backSide: reqBody.backSide,
-      };
-
-    if (reqBody.frontSide) return { frontSide: reqBody.frontSide };
-
-    if (reqBody.backSide) return { backSide: reqBody.backSide };
-    return res.json({message: "please make sure you pass valid data"})
-  };
-
   try {
-    const flashCards = await FlashCard.updateOne(
-      { _id },
-      { $set: createUpdateObject(req.body) }
-    );
+    const flashCards = await FlashCard.updateOne({ _id }, { $set: value });
     res.json(flashCards);
   } catch (err) {
     res.json({ message: err.message });
@@ -91,12 +78,28 @@ routes.patch("/update/:card_id", verifyToken ,async (req, res) => {
 });
 
 /**
- * 4- Remove flash card by ID
+ * Create favorite flashCards route
  */
-routes.delete("/delete/:card_id", verifyToken , async (req, res) => {
+routes.get("/favorite", verifyToken, async (req, res) => {
+  const userID = req.user._id;
+  const favoriteFlashCards = await FlashCard.find({
+    authorID: userID,
+    isFavorite: true,
+  });
+
+  res.json(favoriteFlashCards);
+});
+
+/**
+ * Remove flash card by ID
+ */
+routes.delete("/delete/:card_id", verifyToken, async (req, res) => {
   //TODO: validate flashcard id
+  const { _id: authorID } = req.user;
+  const _id = req.params.card_id;
+  if (!_id) return res.json({ message: "unexpected card id" });
   try {
-    const flashCards = await FlashCard.deleteOne({ _id: req.params.card_id });
+    const flashCards = await FlashCard.deleteOne({ _id, authorID });
     res.json(flashCards);
   } catch (err) {
     res.json({ message: err.message });
