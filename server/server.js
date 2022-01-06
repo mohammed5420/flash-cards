@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const flashCardRoutes = require("./routes/Cards");
 const authRoutes = require("./routes/Auth");
+const verifyToken = require("./middleware/verifyToken");
 require("./db.config");
 require("dotenv").config();
 
@@ -15,7 +16,7 @@ app.use(
 
 //API Routes
 app.use("/users", authRoutes);
-app.use("/flashcards", flashCardRoutes);
+app.use("/flashcards",verifyToken ,flashCardRoutes);
 
 app.get("/flashcards/api/v1/", (req, res) => {
   res.send("please make sure you are authenticated");
