@@ -5,7 +5,7 @@ const {
 const FlashCard = require("../models/FlashCard");
 
 //get All Cards
-export const getAllFlashCards = async (req, res) => {
+exports.getAllFlashCards = async (req, res) => {
   const { _id } = req.user;
   try {
     const flashCards = await FlashCard.find({ authorID: _id });
@@ -16,7 +16,7 @@ export const getAllFlashCards = async (req, res) => {
 };
 
 //TODO: create flashCard
-export const createFlashCard = async (req, res) => {
+exports.createFlashCard = async (req, res) => {
   const { value, error } = createFlashcardValidator(req.body);
   const { _id } = req.user;
 
@@ -37,7 +37,7 @@ export const createFlashCard = async (req, res) => {
 };
 
 // delete FlashCard
-export const deleteFlashCard = async (req, res) => {
+exports.deleteFlashCard = async (req, res) => {
   // validate flashcard id
   const { _id: authorID } = req.user;
   const _id = req.params.card_id;
@@ -51,7 +51,7 @@ export const deleteFlashCard = async (req, res) => {
 };
 
 //get All FavoriteCards
-export const getFavoriteFlashCards = async (req, res) => {
+exports.getFavoriteFlashCards = async (req, res) => {
   const userID = req.user._id;
   const favoriteFlashCards = await FlashCard.find({
     authorID: userID,
@@ -62,7 +62,7 @@ export const getFavoriteFlashCards = async (req, res) => {
 };
 
 //update flashCard
-export const updateFlashCard = async (req, res) => {
+exports.updateFlashCard = async (req, res) => {
   const _id = req.params.card_id;
   //check if card id param exist
   if (!_id)

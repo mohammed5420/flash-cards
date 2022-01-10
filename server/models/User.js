@@ -19,6 +19,10 @@ const userSchema = mongoose.Schema({
     joinedAt: {
         type: Date,
         default: () => Date.now()
+    },
+    isVerified: {
+        type: Boolean,
+        default: false,
     }
 });
 

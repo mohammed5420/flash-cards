@@ -1,5 +1,6 @@
 const routes = require("express").Router();
 const usersController = require("./../controllers/usersController");
+const verifyToken = require("./../middleware/verifyToken");
 /**
  * ### Auth Route
  * #### 1- Signup
@@ -19,5 +20,12 @@ routes.post("/signup", usersController.signupUser);
  */
 
 routes.post("/login", usersController.loginUser);
+
+/**
+ * Change user email
+ */
+routes.post("/username", verifyToken, usersController.changeUserName);
+
+routes.post("/forgetPassword", usersController.forgetUserPassword);
 
 module.exports = routes;
