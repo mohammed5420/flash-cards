@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
     if(!bearerHeader) return res.sendStatus(403).json({message: "Forbidden"});
     const token = bearerHeader.split(" ")[1];
     try {
-        const user = jwt.verify(token,process.env.SECRETKEY);
+        const user = jwt.verify(token,process.env.SECRET_KEY);
         req.user = user;
         return next();
     } catch (err) {

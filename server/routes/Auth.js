@@ -28,4 +28,6 @@ routes.post("/username", verifyToken, usersController.changeUserName);
 
 routes.post("/forgetPassword", usersController.forgetUserPassword);
 
+routes.get("/verifyaccount/:userToken", usersController.verifyAccount);
+
 module.exports = routes;
