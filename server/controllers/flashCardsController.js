@@ -19,7 +19,6 @@ exports.getAllFlashCards = async (req, res) => {
 exports.createFlashCard = async (req, res) => {
   const { value, error } = createFlashcardValidator(req.body);
   const { _id } = req.user;
-
   if (error) {
     return res.json({ message: error.details[0].message });
   }

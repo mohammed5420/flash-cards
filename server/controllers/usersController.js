@@ -1,8 +1,13 @@
 const User = require("./../models/User");
-const { loginFormValidator, signupFormValidator } = require("./../validation");
+const {
+  loginFormValidator,
+  signupFormValidator,
+  emailValidator,
+  resetPasswordValidator,
+} = require("./../validation");
 const { sendEmailMessage } = require("./../utils/sendMail");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const { hashPassword, comparPasswords } = require("./../utils/hashPassword");
 
 exports.signupUser = async (req, res) => {
   //validate user data
@@ -19,8 +24,7 @@ exports.signupUser = async (req, res) => {
     return res.json({ message: "this email is already registerd" });
 
   //encrypt user password
-  const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(value.password, salt);
+  const hashedPassword = hashPassword(value.password);
 
   //create new user object
   const newUser = new User({
@@ -72,7 +76,7 @@ exports.loginUser = async (req, res) => {
   if (isSignedEmail.length === 0)
     return res.json({ message: "this email isn't registerd please signup" });
   const hashedPassword = isSignedEmail.password;
-  if (!bcrypt.compareSync(value.password, hashedPassword))
+  if (!comparPasswords(value.password, hashedPassword))
     return res.json({ message: "email or password isn't correct" });
 
   //check if the account is verified
@@ -85,6 +89,7 @@ exports.loginUser = async (req, res) => {
     });
 
   //login the user by sending his JWT token
+  console.log(isSignedEmail._id)
   const token = jwt.sign({ _id: isSignedEmail._id }, process.env.SECRET_KEY, {
     expiresIn: "30d",
   });
@@ -113,15 +118,17 @@ exports.changeUserName = async (req, res) => {
 //TODO:
 exports.forgetUserPassword = async (req, res) => {
   //validate user data
+  const { value, error } = emailValidator(req.body.email);
+  if (error) return res.json({ message: error.details[0].message });
+  //check if this registerd email
   try {
-    const userEmail = req.body.email;
-    if (!userEmail)
-      return res.json({ message: "account email address is required" });
-    //verify user email
-    const user = await User.findOne({ email: userEmail }, { _id: 1, email: 1 });
+    const user = await User.findOne(
+      { email: value },
+      { _id: 1, email: 1, userName: 1 }
+    );
     const userToken = jwt.sign(
       { _id: user._id },
-      process.env.VERIFY_SECRET_KEY,
+      process.env.RESET_SECRET_KEY,
       {
         expiresIn: "1d",
       }
@@ -130,10 +137,13 @@ exports.forgetUserPassword = async (req, res) => {
 
     //send reset password email
     sendEmailMessage({
-      userEmail: userEmail,
-      subject: "Try new things",
-      text: "Node mailer",
+      userEmail: user.email,
+      subject: `Email Verification For ${process.env.APPLICATION_NAME}`,
+      text: "Email verification",
       userID: userToken,
+      type: "accountVerification",
+      userName: user.userName,
+      url: "resetpassword",
     });
     return res.json({
       message:
@@ -145,6 +155,34 @@ exports.forgetUserPassword = async (req, res) => {
 };
 //TODO:
 exports.resetUserPassword = async (req, res) => {
+  //validate user new password
+  const jwtToken = req.params.userToken;
+  const { value, error } = resetPasswordValidator(req.body);
+  if (error) return res.json({ message: error.details[0].message });
+  if (!jwtToken) return res.json({ message: "jwt in params missing!" });
+
+  try {
+    //verify jwt token
+    const { _id } = jwt.verify(jwtToken, process.env.RESET_SECRET_KEY);
+
+    //crypt user password
+    const hashedPassword = hashPassword(value.new_password);
+
+    //find the user and update user password
+    await User.updateOne(
+      { _id },
+      {
+        $set: {
+          password: hashedPassword,
+        },
+      }
+    );
+
+    return res.json({ message: "password updated successfully please try to login" });
+  } catch (err) {
+    console.error("ERROR ⚡", err);
+  }
+
   // const jwtToken = req.params.jwt;
   // //Get the
   // if (!jwtToken)
