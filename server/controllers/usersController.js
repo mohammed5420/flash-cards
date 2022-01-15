@@ -4,6 +4,7 @@ const {
   signupFormValidator,
   emailValidator,
   resetPasswordValidator,
+  userNameValidator,
 } = require("./../validation");
 const { sendEmailMessage } = require("./../utils/sendMail");
 const jwt = require("jsonwebtoken");
@@ -89,7 +90,7 @@ exports.loginUser = async (req, res) => {
     });
 
   //login the user by sending his JWT token
-  console.log(isSignedEmail._id)
+  console.log(isSignedEmail._id);
   const token = jwt.sign({ _id: isSignedEmail._id }, process.env.SECRET_KEY, {
     expiresIn: "30d",
   });
@@ -97,17 +98,70 @@ exports.loginUser = async (req, res) => {
 };
 //TODO:
 exports.changeAccountEmail = async (req, res) => {
-  //validate posted data
+  const { _id } = req.user;
+  //validate user data
+  const { value, error } = emailValidator(req.body);
+  if (error) return res.json({ message: error.details[0].message });
+
+  //verify the new email
+  const user = await User.findOne({ email: value.email });
+  if (user) return req.json({ message: "this email is already used!!" });
+  const userName = await User.findById(_id, { userName: 1 });
+  const userToken = jwt.sign({ _id }, process.env.RESET_SECRET_KEY, {
+    expiresIn: "1d",
+  });
+  sendEmailMessage({
+    userEmail: value.email,
+    subject: `Email Verification For ${process.env.APPLICATION_NAME}`,
+    text: "Email verification",
+    userID: userToken,
+    type: "accountVerification",
+    userName: userName,
+    url: "verifyaccount",
+  });
+  return req.json({
+    message: "verification email was sent to your new account",
+  });
 };
+
+//TODO:
+exports.verifyNewEmail = async (req, res) => {
+  const userToken = req.params.userToken;
+  const { value, error } = emailValidator(req.body);
+  if (error) return res.json({ message: error.details[0].message });
+
+  if (!userToken)
+    return res.json({
+      message: "make sure your signup credentials are correct",
+    });
+
+  try {
+    const { _id } = jwt.verify(userToken, process.env.VERIFY_SECRET_KEY);
+    await User.findByIdAndUpdate(_id, {
+      $set: {
+        email: value.email,
+      },
+    });
+    return res.redirect("/users/login");
+  } catch (err) {
+    console.error("ERROR ⚡", err);
+  }
+}
+
 //TODO:
 exports.changeUserName = async (req, res) => {
   const { _id } = req.user;
   //validate posted data
   const newUserName = req.body.userName;
-  if (!newUserName) return req.json({ message: "user name is required!" });
+  if (!newUserName) return req.json({ message: "new user name is required!" });
+  const { value, error } = userNameValidator(req.body);
+  if (error) return res.json({ message: error.details[0].message });
   //create update object
   try {
-    await User.findOneAndUpdate({ _id }, { $set: { userName: newUserName } });
+    await User.findOneAndUpdate(
+      { _id },
+      { $set: { userName: value.userName } }
+    );
     return res.json({ status: "success" });
   } catch (err) {
     console.log(err);
@@ -154,6 +208,10 @@ exports.forgetUserPassword = async (req, res) => {
   }
 };
 //TODO:
+exports.changePassword = async (req, res) => {
+
+}
+//TODO:
 exports.resetUserPassword = async (req, res) => {
   //validate user new password
   const jwtToken = req.params.userToken;
@@ -174,28 +232,17 @@ exports.resetUserPassword = async (req, res) => {
       {
         $set: {
           password: hashedPassword,
+          passwordChangedAt: Date.now()
         },
       }
     );
 
-    return res.json({ message: "password updated successfully please try to login" });
+    return res.json({
+      message: "password updated successfully please try to login",
+    });
   } catch (err) {
     console.error("ERROR ⚡", err);
   }
-
-  // const jwtToken = req.params.jwt;
-  // //Get the
-  // if (!jwtToken)
-  //   res.json({ message: "please make sure to send registerd email" });
-  // try {
-  //   const token = jwt.verify(jwtToken, process.env.SECRET_KEY);
-  //   const userID = token._id;
-  //   const user = await User.updateOne({ _id: userID },{$set: {
-  //     password
-  //   }});
-  // } catch (error) {
-  //   console.error(error);
-  // }
 };
 //TODO:
 exports.verifyAccount = async (req, res) => {

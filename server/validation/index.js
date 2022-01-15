@@ -78,6 +78,10 @@ const favoriteCardSchema = Joi.object({
   isFavorite: Joi.boolean().required(),
 });
 
+const userNameSchema = Joi.object({
+  userName: Joi.string().max(200).required().label("user name")
+});
+
 
 const updateFlashCardValidator = (requestBody) => {
   return updateFlashCardSchema.validate(requestBody);
@@ -114,6 +118,9 @@ const isFavoriteCardValidator = (requestBody) => {
   return favoriteCardSchema.validate(requestBody);
 };
 
+const userNameValidator = (requestBody) => {
+  return userNameSchema(requestBody);
+}
 module.exports = {
   signupFormValidator,
   loginFormValidator,
@@ -124,4 +131,5 @@ module.exports = {
   updateFlashCardValidator,
   IDValidator,
   isFavoriteCardValidator,
+  userNameValidator
 };
