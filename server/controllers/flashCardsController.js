@@ -3,11 +3,11 @@ const {
   createFlashcardValidator,
 } = require("../validation");
 const FlashCard = require("../models/FlashCard");
-const AppError = require("./../utils/errorsHandler")
+const AppError = require("./../utils/errorsHandler");
 const catchAsync = require("./../utils/catchAsync");
 
 //get All Cards
-exports.getAllFlashCards = catchAsync(async (req, res) => {
+exports.getAllFlashCards = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
@@ -16,6 +16,11 @@ exports.getAllFlashCards = catchAsync(async (req, res) => {
   const flashCards = await FlashCard.find({ authorID: _id })
     .skip(skip)
     .limit(limit);
+  if (!flashCards)
+    return next(
+      new AppError("No favorite card found with that author ID"),
+      404
+    );
   if (flashCards.length === 0 && page === 1) {
     return res.status(201).json({
       status: "success",
@@ -36,11 +41,11 @@ exports.getAllFlashCards = catchAsync(async (req, res) => {
 });
 
 //TODO: create flashCard
-exports.createFlashCard = catchAsync(async (req, res,next) => {
+exports.createFlashCard = catchAsync(async (req, res, next) => {
   const { value, error } = createFlashcardValidator(req.body);
   const { _id } = req.user;
   if (error) {
-    return next(new AppError(error.details[0].message ),500)
+    return next(new AppError(error.details[0].message), 500);
   }
   const card = new FlashCard({
     authorID: _id,
@@ -56,20 +61,21 @@ exports.createFlashCard = catchAsync(async (req, res,next) => {
 });
 
 // delete FlashCard
-exports.deleteFlashCard = catchAsync(async (req, res,next) => {
+exports.deleteFlashCard = catchAsync(async (req, res, next) => {
   // validate flashcard id
-  const { _id: authorID } = req.user;
-  const _id = req.params.card_id;
-  if (!_id) return next(new AppError("card id parameter is missing"),204);
+  const { _id } = req.user;
+  const cardID = req.params.card_id;
+  if (!cardID) return next(new AppError("card id parameter is missing"), 204);
 
-  await FlashCard.deleteOne({ _id, authorID });
+  const card = await FlashCard.deleteOne({ cardID, _id });
+  if (!card) return next(new AppError("No card found with that ID"), 404);
   res
     .status(201)
     .json({ status: "success", message: "card deleted successfully" });
 });
 
 //get All FavoriteCards
-exports.getFavoriteFlashCards = catchAsync(async (req, res) => {
+exports.getFavoriteFlashCards = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
@@ -81,6 +87,11 @@ exports.getFavoriteFlashCards = catchAsync(async (req, res) => {
   })
     .skip(skip)
     .limit(limit);
+  if (!favoriteFlashCards)
+    return next(
+      new AppError("No favorite card found with that author ID"),
+      404
+    );
   if (favoriteFlashCards.length === 0 && page === 1) {
     return res.status(201).json({
       status: "success",
@@ -103,21 +114,20 @@ exports.getFavoriteFlashCards = catchAsync(async (req, res) => {
 });
 
 //update flashCard
-exports.updateFlashCard = catchAsync(async (req, res,next) => {
-  const {_id} = req.params;
+exports.updateFlashCard = catchAsync(async (req, res, next) => {
+
+  const { cardID } = req.params;
+  const {_id} = req.user;
   //check if card id param exist
-  if (!_id)
-    return req.json({ message: "you should pass card id as a parameter" });
+  if (!cardID)
+    return next(new AppError("Card ID is missing"), 206);
   //validate request body data
   const { value, error } = updateFlashCardValidator(req.body);
-  console.log(error);
+  if (error) return next(new AppError(error.details[0].message), 406);
 
-  if (error) return  next(new AppError(error.details[0].message ),406);
-
-  try {
-    const flashCards = await FlashCard.updateOne({ _id }, { $set: value });
-    res.json(flashCards);
-  } catch (err) {
-    res.json({ message: err.message });
-  }
+  const flashCard = await FlashCard.updateOne({ _id: cardID,authorID: _id }, { $set: value });
+  if (!flashCard) return next(new AppError("No card found with that ID"), 404);
+  res
+    .status(201)
+    .json({ status: "success", message: "Card updated successfully!" });
 });
