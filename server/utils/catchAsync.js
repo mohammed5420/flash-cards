@@ -1,9 +1,6 @@
-const catchAsync = (callback) => {
-    try {
-        callback();
-    } catch(error){
-        console.log(error);
-    }
-}
-
-export default catchAsync;
+module.exports = (callback) => {
+  return (req, res, next) => {
+    console.log(req);
+    callback(req, res, next).catch((error) => next(error));
+  };
+};

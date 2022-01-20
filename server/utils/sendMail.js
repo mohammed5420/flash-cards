@@ -40,7 +40,6 @@ exports.sendEmailMessage = async (message) => {
     userName: message.userName,
     url: messageUrl,
   });
-  console.log(htmlTemplate);
   let info = await transporter.sendMail({
     from: `"Mohamed Salah 👽" <${process.env.EMAIL_ADDRESS}>`, // sender address
     to: `${message.userEmail}`, // list of receivers

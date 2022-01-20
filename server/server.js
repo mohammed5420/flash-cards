@@ -4,7 +4,9 @@ const flashCardRoutes = require("./routes/Cards");
 const authRoutes = require("./routes/Auth");
 const verifyToken = require("./middleware/verifyToken");
 require("./db.config");
-require("dotenv").config();
+require("dotenv").config(); 
+const AppError = require("./utils/errorsHandler");
+const globalHandler = require("./controllers/errorController");
 
 //Middleware
 app.use(express.json());
@@ -15,12 +17,16 @@ app.use(
 );
 
 //API Routes
-app.use("/users", authRoutes);
-app.use("/flashcards",verifyToken ,flashCardRoutes);
+app.use("/api/v1/users", authRoutes);
+app.use("/api/v1/flashcards",verifyToken ,flashCardRoutes);
 
-app.get("/flashcards/api/v1/", (req, res) => {
-  res.send("please make sure you are authenticated");
-});
+
+//Unknown Routes
+app.use("*",(res,req,next) => {
+  next(new AppError(`Can't found this page ${res.originalUrl}!`,404))
+})
+app.use(globalHandler);
+//Handle All Application Errors
 
 const port = process.env.PORT || 3300;
 
