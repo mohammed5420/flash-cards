@@ -21,6 +21,7 @@ exports.getAllFlashCards = catchAsync(async (req, res, next) => {
       new AppError("No favorite card found with that author ID"),
       404
     );
+  //if user reached page limit
   if (flashCards.length === 0 && page === 1) {
     return res.status(201).json({
       status: "success",
