@@ -46,7 +46,7 @@ exports.createFlashCard = catchAsync(async (req, res, next) => {
   const { value, error } = createFlashcardValidator(req.body);
   const { _id } = req.user;
   if (error) {
-    return next(new AppError(error.details[0].message), 500);
+    return next(new AppError(error.details[0].message, 500));
   }
   const card = new FlashCard({
     authorID: _id,
@@ -66,10 +66,10 @@ exports.deleteFlashCard = catchAsync(async (req, res, next) => {
   // validate flashcard id
   const { _id } = req.user;
   const cardID = req.params.card_id;
-  if (!cardID) return next(new AppError("card id parameter is missing"), 204);
+  if (!cardID) return next(new AppError("card id parameter is missing", 204));
 
   const card = await FlashCard.deleteOne({ cardID, _id });
-  if (!card) return next(new AppError("No card found with that ID"), 404);
+  if (!card) return next(new AppError("No card found with that ID", 404));
   res
     .status(201)
     .json({ status: "success", message: "card deleted successfully" });
@@ -124,10 +124,10 @@ exports.updateFlashCard = catchAsync(async (req, res, next) => {
     return next(new AppError("Card ID is missing"), 206);
   //validate request body data
   const { value, error } = updateFlashCardValidator(req.body);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
 
   const flashCard = await FlashCard.updateOne({ _id: cardID,authorID: _id }, { $set: value });
-  if (!flashCard) return next(new AppError("No card found with that ID"), 404);
+  if (!flashCard) return next(new AppError("No card found with that ID", 404));
   res
     .status(201)
     .json({ status: "success", message: "Card updated successfully!" });

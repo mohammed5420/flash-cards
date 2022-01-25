@@ -18,12 +18,12 @@ exports.signupUser = catchAsync(async (req, res, next) => {
   const { value, error } = signupFormValidator(req.body);
   //return error message if any
   if (error) {
-    return next(new AppError(error.details[0].message), 406);
+    return next(new AppError(error.details[0].message, 406));
   }
   //check if the user already exist
   const isAlreadyUser = await User.find({ email: value.email });
   if (isAlreadyUser.length !== 0)
-    return next(new AppError("This account is already registerd"), 403);
+    return next(new AppError("This account is already registerd", 403));
 
   //encrypt user password
   const hashedPassword = hashPassword(value.password);
@@ -63,7 +63,7 @@ exports.signupUser = catchAsync(async (req, res, next) => {
 exports.loginUser = catchAsync(async (req, res, next) => {
   //validate user input
   const { value, error } = loginFormValidator(req.body);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
 
   //login the user
   const isSignedEmail = await User.findOne(
@@ -74,11 +74,11 @@ exports.loginUser = catchAsync(async (req, res, next) => {
     return res.json({ message: "this email isn't registerd please signup" });
   const hashedPassword = isSignedEmail.password;
   if (!comparPasswords(value.password, hashedPassword))
-    return next(new AppError("email or password is incorrect"), 403);
+    return next(new AppError("email or password is incorrect",403));
 
   //check if the account is verified
   if (!isSignedEmail.isVerified)
-    return next(new AppError("This account is not verified!"), 403);
+    return next(new AppError("This account is not verified!", 403));
 
   //login the user by sending his JWT token
   const token = jwt.sign({ _id: isSignedEmail._id }, process.env.SECRET_KEY, {
@@ -91,11 +91,11 @@ exports.changeAccountEmail = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
   //validate user data
   const { value, error } = emailValidator(req.body);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
 
   //verify the new email
   const user = await User.findOne({ email: value.email });
-  if (user) return next(new AppError("This email is already registerd"), 204);
+  if (user) return next(new AppError("This email is already registerd", 204));
   const userName = await User.findById(_id, { userName: 1 });
   const userToken = jwt.sign({ _id }, process.env.RESET_SECRET_KEY, {
     expiresIn: "1d",
@@ -119,7 +119,7 @@ exports.changeAccountEmail = catchAsync(async (req, res, next) => {
 exports.verifyNewEmail = catchAsync(async (req, res, next) => {
   const userToken = req.params.userToken;
   const { value, error } = emailValidator(req.body);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
 
   if (!userToken)
     return res.json({
@@ -142,7 +142,7 @@ exports.changeUserName = catchAsync(async (req, res, next) => {
   const newUserName = req.body.userName;
   if (!newUserName) return req.json({ message: "new user name is required!" });
   const { value, error } = userNameValidator(req.body);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
   //create update object
   await User.findOneAndUpdate({ _id }, { $set: { userName: value.userName } });
   return res.json({
@@ -155,7 +155,7 @@ exports.changeUserName = catchAsync(async (req, res, next) => {
 exports.forgetUserPassword = catchAsync(async (req, res, next) => {
   //validate user data
   const { value, error } = emailValidator(req.body.email);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
   //check if this registerd email
 
   const user = await User.findOne(
@@ -165,7 +165,7 @@ exports.forgetUserPassword = catchAsync(async (req, res, next) => {
   const userToken = jwt.sign({ _id: user._id }, process.env.RESET_SECRET_KEY, {
     expiresIn: "1d",
   });
-  if (!user) return next(new AppError("This email is not registerd"), 403);
+  if (!user) return next(new AppError("This email is not registerd", 403));
 
   //send reset password email
   sendEmailMessage({
@@ -188,11 +188,11 @@ exports.changePassword = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
   //validate user data
   const { value, error } = newPasswordValidator(req.body);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
   //verify old password
   const userCurrentPassword = await User.findOne({ _id }, { password: 1 });
   if (!comparPasswords(value.old_password, userCurrentPassword))
-    return next(new AppError(`The old password is wrong`), 406);
+    return next(new AppError(`The old password is wrong`, 406));
   //encrypt the new password
   const newHashedPassword = hashPassword(value.old_password);
   //update user password
@@ -211,7 +211,7 @@ exports.resetUserPassword = catchAsync(async (req, res, next) => {
   //validate user new password
   const jwtToken = req.params.userToken;
   const { value, error } = resetPasswordValidator(req.body);
-  if (error) return next(new AppError(error.details[0].message), 406);
+  if (error) return next(new AppError(error.details[0].message, 406));
   if (!jwtToken) return next(new AppError("JWT is missing"), 204);
 
   //verify jwt token
@@ -232,6 +232,7 @@ exports.resetUserPassword = catchAsync(async (req, res, next) => {
   );
 
   return res.json({
+    status: "success",
     message: "password updated successfully please try to login",
   });
 });

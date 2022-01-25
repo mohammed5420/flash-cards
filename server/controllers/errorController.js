@@ -13,13 +13,15 @@ const handleProdErrors = (error,res) => {
 }
 
 const handleDevErrors = (error,res) => {
-  res.status(error.status).json({
+  res.status(error.statusCode).json({
     status: error.status,
     message: error.message,
-    stack: error.stack,
+    error: error,
+    stack: error.stack
   });
 }
 module.exports = (error, req, res, next) => {
+  console.log(error)
   error.statusCode = error.statusCode || 500;
   error.status = error.status ||"Error";
 
