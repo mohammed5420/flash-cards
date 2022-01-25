@@ -25,7 +25,7 @@ module.exports = (error, req, res, next) => {
 
   if (process.env.ENVIRONMENT === "development") {
     handleDevErrors(error,res);
-  } else if(process.env.ENVIRONMENT === "prduction") {
+  } else if(process.env.ENVIRONMENT === "production") {
     handleProdErrors(error,res);
   }
 };
