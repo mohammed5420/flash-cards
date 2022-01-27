@@ -19,12 +19,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-<<<<<<< HEAD
-    "start-server": "cd server && npm start",
-    "start-docker": "cd server && docker compose start"
-=======
+    "start-docker": "cd server && docker compose start",
     "start-server": "cd server && docker compose start && npm start"
->>>>>>> back-end
   },
   "eslintConfig": {
     "extends": [
