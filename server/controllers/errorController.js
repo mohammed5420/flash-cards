@@ -1,4 +1,4 @@
-const handleProdErrors = (error,res) => {
+const handleProdErrors = (error, res) => {
   if (error.isOperational) {
     res.status(error.statusCode).json({
       status: error.status,
@@ -10,24 +10,33 @@ const handleProdErrors = (error,res) => {
       message: "something went wrong!",
     });
   }
-}
+};
 
-const handleDevErrors = (error,res) => {
+const handleDevErrors = (error, res) => {
+  if (error.name === "CastError") {
+    return res
+      .status(error.statusCode)
+      .json({
+        status: error.status,
+        message: "invalid flashcard ID!!",
+        stack: error.stack,
+      });
+  }
   res.status(error.statusCode).json({
     status: error.status,
     message: error.message,
     error: error,
-    stack: error.stack
+    stack: error.stack,
   });
-}
+};
 module.exports = (error, req, res, next) => {
-  console.log(error)
+  console.log(error);
   error.statusCode = error.statusCode || 500;
-  error.status = error.status ||"Error";
+  error.status = error.status || "Error";
 
   if (process.env.ENVIRONMENT === "development") {
-    handleDevErrors(error,res);
-  } else if(process.env.ENVIRONMENT === "production") {
-    handleProdErrors(error,res);
+    handleDevErrors(error, res);
+  } else if (process.env.ENVIRONMENT === "production") {
+    handleProdErrors(error, res);
   }
 };

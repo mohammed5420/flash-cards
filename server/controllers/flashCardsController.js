@@ -18,8 +18,7 @@ exports.getAllFlashCards = catchAsync(async (req, res, next) => {
     .limit(limit);
   if (!flashCards)
     return next(
-      new AppError("No favorite card found with that author ID"),
-      404
+      new AppError("No favorite card found with that author ID", 404)
     );
   //if user reached page limit
   if (flashCards.length === 0 && page === 1) {
@@ -65,7 +64,7 @@ exports.createFlashCard = catchAsync(async (req, res, next) => {
 exports.deleteFlashCard = catchAsync(async (req, res, next) => {
   // validate flashcard id
   const { _id } = req.user;
-  const cardID = req.params.card_id;
+  const { cardID } = req.params;
   if (!cardID) return next(new AppError("card id parameter is missing", 204));
 
   const card = await FlashCard.deleteOne({ cardID, _id });
@@ -90,8 +89,8 @@ exports.getFavoriteFlashCards = catchAsync(async (req, res, next) => {
     .limit(limit);
   if (!favoriteFlashCards)
     return next(
-      new AppError("No favorite card found with that author ID"),
-      404
+      new AppError("No favorite card found with that author ID",
+      404)
     );
   if (favoriteFlashCards.length === 0 && page === 1) {
     return res.status(201).json({
@@ -116,17 +115,18 @@ exports.getFavoriteFlashCards = catchAsync(async (req, res, next) => {
 
 //update flashCard
 exports.updateFlashCard = catchAsync(async (req, res, next) => {
-
   const { cardID } = req.params;
-  const {_id} = req.user;
+  const { _id } = req.user;
   //check if card id param exist
-  if (!cardID)
-    return next(new AppError("Card ID is missing"), 206);
+  if (!cardID) return next(new AppError("Card ID is missing", 206));
   //validate request body data
   const { value, error } = updateFlashCardValidator(req.body);
   if (error) return next(new AppError(error.details[0].message, 406));
 
-  const flashCard = await FlashCard.updateOne({ _id: cardID,authorID: _id }, { $set: value });
+  const flashCard = await FlashCard.updateOne(
+    { _id: cardID, authorID: _id },
+    { $set: value }
+  );
   if (!flashCard) return next(new AppError("No card found with that ID", 404));
   res
     .status(201)

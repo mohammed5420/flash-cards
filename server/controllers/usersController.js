@@ -82,7 +82,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
 
   //login the user by sending his JWT token
   const token = jwt.sign({ _id: isSignedEmail._id }, process.env.SECRET_KEY, {
-    expiresIn: "30d",
+    expiresIn: "5m",
   });
   return res.json({ jwtToken: token });
 });
@@ -212,7 +212,7 @@ exports.resetUserPassword = catchAsync(async (req, res, next) => {
   const jwtToken = req.params.userToken;
   const { value, error } = resetPasswordValidator(req.body);
   if (error) return next(new AppError(error.details[0].message, 406));
-  if (!jwtToken) return next(new AppError("JWT is missing"), 204);
+  if (!jwtToken) return next(new AppError("JWT is missing", 204));
 
   //verify jwt token
   const { _id } = jwt.verify(jwtToken, process.env.RESET_SECRET_KEY);
