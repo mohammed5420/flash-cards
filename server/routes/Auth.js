@@ -28,4 +28,7 @@ routes.post("/username", verifyToken, usersController.changeUserName);
 
 routes.post("/forgetPassword", usersController.forgetUserPassword);
 
+routes.get("/verifyaccount/:userToken", usersController.verifyAccount);
+routes.post("/resetpassword/:userToken",usersController.resetUserPassword);
+
 module.exports = routes;

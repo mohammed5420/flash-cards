@@ -3,80 +3,132 @@ const {
   createFlashcardValidator,
 } = require("../validation");
 const FlashCard = require("../models/FlashCard");
+const AppError = require("./../utils/errorsHandler");
+const catchAsync = require("./../utils/catchAsync");
 
 //get All Cards
-exports.getAllFlashCards = async (req, res) => {
+exports.getAllFlashCards = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
-  try {
-    const flashCards = await FlashCard.find({ authorID: _id });
-    res.json(flashCards);
-  } catch (err) {
-    res.json({ message: err.message });
+  const page = req.query.page || 1;
+  const limit = req.query.limit || 10;
+  //page 1 (1 -- 10) page 2 (11 -- 20)
+  const skip = (page - 1) * limit;
+  const flashCards = await FlashCard.find({ authorID: _id })
+    .skip(skip)
+    .limit(limit);
+  if (!flashCards)
+    return next(
+      new AppError("No favorite card found with that author ID", 404)
+    );
+  //if user reached page limit
+  if (flashCards.length === 0 && page === 1) {
+    return res.status(201).json({
+      status: "success",
+      length: flashCards.length,
+      message: "This user has no cards",
+    });
   }
-};
+  if (flashCards.length === 0 && page > 1) {
+    return res.status(201).json({
+      status: "success",
+      length: flashCards.length,
+      message: "Empty page! go back",
+    });
+  }
+  res
+    .status(200)
+    .json({ status: "success", length: flashCards.length, data: flashCards });
+});
 
 //TODO: create flashCard
-exports.createFlashCard = async (req, res) => {
+exports.createFlashCard = catchAsync(async (req, res, next) => {
   const { value, error } = createFlashcardValidator(req.body);
   const { _id } = req.user;
-
   if (error) {
-    return res.json({ message: error.details[0].message });
+    return next(new AppError(error.details[0].message, 500));
   }
   const card = new FlashCard({
     authorID: _id,
     frontSide: value.frontSide,
     backSide: value.backSide,
   });
-  try {
-    const savedCard = await card.save();
-    res.json(savedCard);
-  } catch (err) {
-    res.json({ message: err.message });
-  }
-};
+
+  await card.save();
+  res.status(201).json({
+    status: "success",
+    message: "card created successfully!",
+  });
+});
 
 // delete FlashCard
-exports.deleteFlashCard = async (req, res) => {
+exports.deleteFlashCard = catchAsync(async (req, res, next) => {
   // validate flashcard id
-  const { _id: authorID } = req.user;
-  const _id = req.params.card_id;
-  if (!_id) return res.json({ message: "unexpected card id" });
-  try {
-    const flashCards = await FlashCard.deleteOne({ _id, authorID });
-    res.json(flashCards);
-  } catch (err) {
-    res.json({ message: err.message });
-  }
-};
+  const { _id } = req.user;
+  const { cardID } = req.params;
+  if (!cardID) return next(new AppError("card id parameter is missing", 204));
+
+  const card = await FlashCard.deleteOne({ cardID, _id });
+  if (!card) return next(new AppError("No card found with that ID", 404));
+  res
+    .status(201)
+    .json({ status: "success", message: "card deleted successfully" });
+});
 
 //get All FavoriteCards
-exports.getFavoriteFlashCards = async (req, res) => {
-  const userID = req.user._id;
+exports.getFavoriteFlashCards = catchAsync(async (req, res, next) => {
+  const { _id } = req.user;
+  const page = req.query.page || 1;
+  const limit = req.query.limit || 10;
+  //page 1 (1 -- 10) page 2 (11 -- 20)
+  const skip = (page - 1) * limit;
   const favoriteFlashCards = await FlashCard.find({
-    authorID: userID,
+    authorID: _id,
     isFavorite: true,
+  })
+    .skip(skip)
+    .limit(limit);
+  if (!favoriteFlashCards)
+    return next(
+      new AppError("No favorite card found with that author ID",
+      404)
+    );
+  if (favoriteFlashCards.length === 0 && page === 1) {
+    return res.status(201).json({
+      status: "success",
+      length: favoriteFlashCards.length,
+      message: "This user has no cards",
+    });
+  }
+  if (favoriteFlashCards.length === 0 && page > 1) {
+    return res.status(201).json({
+      status: "success",
+      length: favoriteFlashCards.length,
+      message: "Empty page! go back",
+    });
+  }
+  res.status(200).json({
+    status: "success",
+    length: favoriteFlashCards.length,
+    data: favoriteFlashCards,
   });
-
-  res.json(favoriteFlashCards);
-};
+});
 
 //update flashCard
-exports.updateFlashCard = async (req, res) => {
-  const _id = req.params.card_id;
+exports.updateFlashCard = catchAsync(async (req, res, next) => {
+  const { cardID } = req.params;
+  const { _id } = req.user;
   //check if card id param exist
-  if (!_id)
-    return req.json({ message: "you should pass card id as a parameter" });
+  if (!cardID) return next(new AppError("Card ID is missing", 206));
   //validate request body data
   const { value, error } = updateFlashCardValidator(req.body);
-  console.log(error);
+  if (error) return next(new AppError(error.details[0].message, 406));
 
-  if (error) return res.json({ message: error.details[0].message });
-
-  try {
-    const flashCards = await FlashCard.updateOne({ _id }, { $set: value });
-    res.json(flashCards);
-  } catch (err) {
-    res.json({ message: err.message });
-  }
-};
+  const flashCard = await FlashCard.updateOne(
+    { _id: cardID, authorID: _id },
+    { $set: value }
+  );
+  if (!flashCard) return next(new AppError("No card found with that ID", 404));
+  res
+    .status(201)
+    .json({ status: "success", message: "Card updated successfully!" });
+});

@@ -19,8 +19,12 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
+<<<<<<< HEAD
     "start-server": "cd server && npm start",
     "start-docker": "cd server && docker compose start"
+=======
+    "start-server": "cd server && docker compose start && npm start"
+>>>>>>> back-end
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +46,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^9.8.8",
+    "commitizen": "^4.2.4",
     "postcss": "^7.0.39",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   }

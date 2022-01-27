@@ -54,9 +54,9 @@ const createFlashCardSchema = Joi.object({
   backSide: Joi.string().required(),
   colorPalette: {
     frontSide: Joi.string().required(),
-    backSide: Joi.string().required()
+    backSide: Joi.string().required(),
   },
-  isFavorite: Joi.boolean()
+  isFavorite: Joi.boolean(),
 });
 
 const updateFlashCardSchema = Joi.object({
@@ -64,9 +64,9 @@ const updateFlashCardSchema = Joi.object({
   backSide: Joi.string(),
   colorPalette: {
     frontSide: Joi.string(),
-    backSide: Joi.string()
+    backSide: Joi.string(),
   },
-  isFavorite: Joi.boolean()
+  isFavorite: Joi.boolean(),
 });
 
 const IDSchema = Joi.object({
@@ -75,8 +75,13 @@ const IDSchema = Joi.object({
 
 const favoriteCardSchema = Joi.object({
   _id: Joi.string().min(12).required(),
-  isFavorite: Joi.boolean().required()
-})
+  isFavorite: Joi.boolean().required(),
+});
+
+const userNameSchema = Joi.object({
+  userName: Joi.string().max(200).required().label("user name")
+});
+
 
 const updateFlashCardValidator = (requestBody) => {
   return updateFlashCardSchema.validate(requestBody);
@@ -111,8 +116,11 @@ const createFlashcardValidator = (requestBody) => {
 
 const isFavoriteCardValidator = (requestBody) => {
   return favoriteCardSchema.validate(requestBody);
-}
+};
 
+const userNameValidator = (requestBody) => {
+  return userNameSchema(requestBody);
+}
 module.exports = {
   signupFormValidator,
   loginFormValidator,
@@ -122,5 +130,6 @@ module.exports = {
   createFlashcardValidator,
   updateFlashCardValidator,
   IDValidator,
-  isFavoriteCardValidator
+  isFavoriteCardValidator,
+  userNameValidator
 };
