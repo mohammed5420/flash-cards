@@ -1,49 +1,30 @@
 {
-  "name": "memofy",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@craco/craco": "^6.4.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "nodemailer": "^6.7.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^6.1.1",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
-  },
+  "name": "memofy-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "start-docker": "cd server && docker compose start",
-    "start-server": "cd server && docker compose start && npm start"
+    "start": "SET NODE_ENV=development&& docker compose start && nodemon server.js",
+    "start:prod": "SET NODE_ENV=production&& docker compose start && nodemon server.js"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@joi/date": "^2.1.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "handlebars": "^4.7.7",
+    "joi": "^17.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.14",
+    "nodemon": "^2.0.15"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "autoprefixer": "^9.8.8",
-    "commitizen": "^4.2.4",
-    "postcss": "^7.0.39",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
   }
 }
