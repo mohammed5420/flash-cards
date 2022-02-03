@@ -1,29 +1,25 @@
 const mongoose = require("mongoose");
-
+const gameHistory = mongoose.Schema({
+  wrongCards: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      required: true,
+      ref: "card"
+    },
+  ],
+  score: { type: Number, required: true },
+  playedAt: {
+    type: Date,
+    default: () => Date.now(),
+  },
+});
 const GameSchema = mongoose.Schema({
   userID: {
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
     ref: "users",
   },
-  gameHistory: [
-    {
-      wrongCards: [
-        {
-          cardId: {
-            type: mongoose.SchemaTypes.ObjectId,
-            required: true,
-            ref: "card",
-          },
-        },
-      ],
-      score: { type: Number },
-      playedAt: {
-        type: Date,
-        default: () => Date.now(),
-      },
-    },
-  ],
+  gameHistory: [gameHistory],
   highestScore: {
     type: Number,
     required: true,
@@ -32,10 +28,10 @@ const GameSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  createdAt : {
+  createdAt: {
     type: Date,
-    default: () => Date.now()
-  }
+    default: () => Date.now(),
+  },
 });
 
-module.exports = mongoose.model("card", GameSchema);
+module.exports = mongoose.model("Game", GameSchema);
