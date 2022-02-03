@@ -14,8 +14,8 @@ exports.getAllFlashCards = catchAsync(async (req, res, next) => {
   //page 1 (1 -- 10) page 2 (11 -- 20)
   const skip = (page - 1) * limit;
   const flashCards = await FlashCard.find({ authorID: _id })
-    .skip(skip)
-    .limit(limit);
+    .skip(Number(skip))
+    .limit(Number(limit));
   if (!flashCards)
     return next(
       new AppError("No favorite card found with that author ID", 404)
