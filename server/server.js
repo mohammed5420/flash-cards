@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const flashCardRoutes = require("./routes/Cards");
 const authRoutes = require("./routes/Auth");
+const gamesRoutes = require("./routes/Games");
 const verifyToken = require("./middleware/verifyToken");
 require("./db.config");
 require("dotenv").config(); 
@@ -19,6 +20,7 @@ app.use(
 //API Routes
 app.use("/api/v1/users", authRoutes);
 app.use("/api/v1/flashcards",verifyToken ,flashCardRoutes);
+app.use("/api/v1/flashcards/games",verifyToken ,gamesRoutes);
 
 
 //Unknown Routes

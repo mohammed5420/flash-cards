@@ -22,10 +22,12 @@ exports.sendEmailMessage = async (message) => {
     },
   });
 
+  console.log(message);
+
   // send mail with defined transport object
   const messageUrl =
     process.env.ENVIRONMENT === "development"
-      ? `http://localhost:${process.env.PORT}/users/${message.url}/${message.userID}`
+      ? `http://localhost:${process.env.PORT}/api/v1/users/${message.url}/${message.userID}`
       : "";
   const templatePath = path.join(
     __dirname,
@@ -35,6 +37,8 @@ exports.sendEmailMessage = async (message) => {
         : "resetPassword.ejs"
     }`
   );
+
+  console.log(messageUrl);
   const source = fs.readFileSync(templatePath, 'utf-8').toString();
   const htmlTemplate = ejs.render(source, {
     userName: message.userName,

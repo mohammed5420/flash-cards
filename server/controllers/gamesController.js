@@ -6,7 +6,11 @@ const catchAsync = require("../utils/catchAsync");
  * Serve random cards
  */
 exports.getGameCards = catchAsync(async (req,res,next) => {
+    //Get Random Cards using user id 
 
+    // Create Response Object 
+
+    //Send Response Object
 })
 
 /**
