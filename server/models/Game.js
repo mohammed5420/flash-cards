@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 
 const GameSchema = mongoose.Schema({
-  userId: {
+  userID: {
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
     ref: "users",
   },
   gameHistory: [
     {
-      correctAnswers: { type: Number, required: true },
       wrongCards: [
         {
           cardId: {
@@ -33,6 +32,10 @@ const GameSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  createdAt : {
+    type: Date,
+    default: () => Date.now()
+  }
 });
 
 module.exports = mongoose.model("card", GameSchema);
