@@ -81,6 +81,13 @@ const favoriteCardSchema = Joi.object({
 const userNameSchema = Joi.object({
   userName: Joi.string().max(200).required().label("user name")
 });
+const cardID = Joi.string().min(12).required();
+
+const gameStatsSchema = Joi.object({
+  userID: Joi.string().min(12).required(),
+  wrongCards: Joi.array().items(cardID),
+  score: Joi.number().max(5).min(0)
+});
 
 
 const updateFlashCardValidator = (requestBody) => {
@@ -119,7 +126,10 @@ const isFavoriteCardValidator = (requestBody) => {
 };
 
 const userNameValidator = (requestBody) => {
-  return userNameSchema(requestBody);
+  return userNameSchema.validate(requestBody);
+}
+const gameStatsValidator = (requestBody) => {
+  return gameStatsSchema.validate(requestBody);
 }
 module.exports = {
   signupFormValidator,
@@ -131,5 +141,6 @@ module.exports = {
   updateFlashCardValidator,
   IDValidator,
   isFavoriteCardValidator,
-  userNameValidator
+  userNameValidator,
+  gameStatsValidator
 };
