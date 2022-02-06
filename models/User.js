@@ -15,6 +15,7 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false
   },
   joinedAt: {
     type: Date,
@@ -23,10 +24,12 @@ const userSchema = mongoose.Schema({
   isVerified: {
     type: Boolean,
     default: false,
+    select: false
   },
   passwordChangedAt: {
     type: Date,
     default: () => Date.now(),
+    select: false
   },
 });
 

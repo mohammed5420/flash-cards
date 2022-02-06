@@ -14,7 +14,7 @@ const gameHistory = mongoose.Schema({
   },
 });
 const GameSchema = mongoose.Schema({
-  userID: {
+  playerId: {
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
     ref: "users",
