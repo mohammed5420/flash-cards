@@ -1,4 +1,4 @@
-const { getGameCards, saveGameStats, updateGameStats, deleteGameStats, getGameHistory } = require("../controllers/gamesController");
+const { getGameCards, saveGameStats, updateGameStats, deleteGameStats, getGameHistory, getFailedCards } = require("../controllers/gamesController");
 
 //TODO: Flash-Cards Games Routes
 const route = require("express").Router();
@@ -11,6 +11,7 @@ route
     .delete("/qa", deleteGameStats)
 
 route   
-    .get("/qa/gamehistory",getGameHistory);
+    .get("/qa/gamehistory",getGameHistory)
+    .get("/qa/wrongcards",getFailedCards)
 module.exports = route;
     

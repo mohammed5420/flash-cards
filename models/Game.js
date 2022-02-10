@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const gameHistory = mongoose.Schema({
-  wrongCards: [
+  wrongAnswers: [
     {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,

@@ -84,8 +84,8 @@ const userNameSchema = Joi.object({
 const cardID = Joi.string().min(12).required();
 
 const gameStatsSchema = Joi.object({
-  userID: Joi.string().min(12).required(),
-  wrongCards: Joi.array().items(cardID),
+  wrongAnswers: Joi.array().items(cardID).allow(null),
+  correctAnswers: Joi.array().items(cardID).allow(null),
   score: Joi.number().max(5).min(0)
 });
 
