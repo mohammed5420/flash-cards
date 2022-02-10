@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "SET NODE_ENV=development&& docker compose start && nodemon server.js",
-    "start:prod": "SET NODE_ENV=production&& docker compose start && nodemon server.js"
+    "start:prod": "SET NODE_ENV=production&& docker compose start && nodemon server.js",
+    "test":"jest"
   },
   "keywords": [],
   "author": "",
@@ -28,5 +29,8 @@
     "commitizen": {
       "path": "git-cz"
     }
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
