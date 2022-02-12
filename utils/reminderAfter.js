@@ -1,5 +1,6 @@
 exports.reminder = (currentReminder) => {
     let updatedReminder = 0;
+    currentReminder = Number(currentReminder);
     switch(currentReminder){
         case 1:
             updatedReminder = 2;
