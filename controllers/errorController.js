@@ -34,10 +34,10 @@ module.exports = (error, req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     return handleDevErrors(error, res);
   } else if (process.env.NODE_ENV === "production") {
-    let err = {...error}
-    if (error.name === "CastError"){
+    let err = { ...error };
+    if (error.name === "CastError") {
       err = handleCastErrors(err);
-    } 
+    }
     return handleProdErrors(err, res);
   }
 };

@@ -18,7 +18,7 @@ exports.reminder = (currentReminder) => {
             updatedReminder = 21; 
             break;
         default:
-            updatedReminder = 21; 
+            updatedReminder = currentReminder; 
     }
     return updatedReminder;
 }

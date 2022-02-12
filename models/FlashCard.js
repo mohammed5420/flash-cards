@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const moment = require("moment");
-const {reminder} = require("./../utils/reminderAfter")
+const { reminder } = require("./../utils/reminderAfter");
 
 //FlashCard color schema
 const colorPaletteSchema = new mongoose.Schema({
@@ -30,7 +30,7 @@ const flashCardSchema = new mongoose.Schema({
   },
   showAt: {
     type: Date,
-    default: () => Date.now()
+    default: () => Date.now(),
   },
   canPlay: {
     type: Boolean,
@@ -38,7 +38,7 @@ const flashCardSchema = new mongoose.Schema({
   },
   remindAfter: {
     type: Number,
-    default: 1
+    default: 1,
   },
   colorPalette: colorPaletteSchema,
   isFavorite: {
@@ -51,8 +51,18 @@ const flashCardSchema = new mongoose.Schema({
   },
 });
 
-flashCardSchema.methods.updateShowAtDate = async function(id) {
-  await mongoose.model('card').updateOne({_id: id},{$set: {showAt: moment().add(this.remindAfter, "d").toISOString(),remindAfter: reminder(this.remindAfter)}});
-}
+flashCardSchema.methods.updateShowAtDate = async function (id) {
+  await mongoose
+    .model("card")
+    .updateOne(
+      { _id: id },
+      {
+        $set: {
+          showAt: moment().add(this.remindAfter, "d").toISOString(),
+          remindAfter: reminder(this.remindAfter),
+        },
+      }
+    );
+};
 
 module.exports = mongoose.model("card", flashCardSchema);

@@ -43,9 +43,9 @@ exports.saveGameStats = catchAsync(async (req, res, next) => {
   if (error) return next(new AppError("Invalid game history", 403));
   //update all correct cards and wrong cards
   const correctCards = await Card.find({ _id: { $in: value.correctAnswers } });
-    correctCards.forEach(async (card) => {
-      await card.updateShowAtDate(card._id);
-    });
+  correctCards.forEach(async (card) => {
+    await card.updateShowAtDate(card._id);
+  });
   //check if user hse pervious game history
   const gameHistoryObject = await Game.findOne({ playerId: _id });
   if (!gameHistoryObject) {

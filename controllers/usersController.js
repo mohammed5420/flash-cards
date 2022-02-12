@@ -74,7 +74,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
     return res.json({ message: "this email isn't registerd please signup" });
   const hashedPassword = isSignedEmail.password;
   if (!comparPasswords(value.password, hashedPassword))
-    return next(new AppError("email or password is incorrect",403));
+    return next(new AppError("email or password is incorrect", 403));
 
   //check if the account is verified
   if (!isSignedEmail.isVerified)
@@ -206,7 +206,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
   );
 });
 
-//TODO: 
+//TODO:
 exports.resetUserPassword = catchAsync(async (req, res, next) => {
   //validate user new password
   const jwtToken = req.params.userToken;

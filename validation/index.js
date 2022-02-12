@@ -79,16 +79,15 @@ const favoriteCardSchema = Joi.object({
 });
 
 const userNameSchema = Joi.object({
-  userName: Joi.string().max(200).required().label("user name")
+  userName: Joi.string().max(200).required().label("user name"),
 });
 const cardID = Joi.string().min(12).required();
 
 const gameStatsSchema = Joi.object({
   wrongAnswers: Joi.array().items(cardID).allow(null),
   correctAnswers: Joi.array().items(cardID).allow(null),
-  score: Joi.number().max(5).min(0)
+  score: Joi.number().max(5).min(0),
 });
-
 
 const updateFlashCardValidator = (requestBody) => {
   return updateFlashCardSchema.validate(requestBody);
@@ -127,10 +126,10 @@ const isFavoriteCardValidator = (requestBody) => {
 
 const userNameValidator = (requestBody) => {
   return userNameSchema.validate(requestBody);
-}
+};
 const gameStatsValidator = (requestBody) => {
   return gameStatsSchema.validate(requestBody);
-}
+};
 module.exports = {
   signupFormValidator,
   loginFormValidator,
@@ -142,5 +141,5 @@ module.exports = {
   IDValidator,
   isFavoriteCardValidator,
   userNameValidator,
-  gameStatsValidator
+  gameStatsValidator,
 };
