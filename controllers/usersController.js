@@ -1,3 +1,8 @@
+/** App Controller providing related user functions
+ * @module controllers/usersController
+ * @requires express
+ */
+
 const User = require("./../models/User");
 const {
   loginFormValidator,
@@ -13,6 +18,16 @@ const { hashPassword, comparPasswords } = require("./../utils/hashPassword");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/errorsHandler");
 
+
+/**
+ * Route to signup new users.
+ * @name post/signupUser
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 exports.signupUser = catchAsync(async (req, res, next) => {
   //validate user data
   const { value, error } = signupFormValidator(req.body);
@@ -60,6 +75,17 @@ exports.signupUser = catchAsync(async (req, res, next) => {
   });
 });
 
+
+
+/**
+ * Route to login users.
+ * @name post/loginUser
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 exports.loginUser = catchAsync(async (req, res, next) => {
   //validate user input
   const { value, error } = loginFormValidator(req.body);
@@ -93,7 +119,18 @@ exports.loginUser = catchAsync(async (req, res, next) => {
   }
   return res.json({status:"success",user: userObject, jwtToken: token });
 });
-//TODO:
+
+
+
+/**
+ * Route to change user email account.
+ * @name post/changeAccountEmail
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 exports.changeAccountEmail = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
   //validate user data
@@ -122,8 +159,18 @@ exports.changeAccountEmail = catchAsync(async (req, res, next) => {
   });
 });
 
-//TODO:
-exports.verifyNewEmail = catchAsync(async (req, res, next) => {
+
+
+/**
+ * Route to verify new user email.
+ * @name post/verifyNewAccountEmail
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+exports.verifyNewAccountEmail = catchAsync(async (req, res, next) => {
   const userToken = req.params.userToken;
   const { value, error } = emailValidator(req.body);
   if (error) return next(new AppError(error.details[0].message, 406));
@@ -142,7 +189,17 @@ exports.verifyNewEmail = catchAsync(async (req, res, next) => {
   res.redirect("/users/login");
 });
 
-//TODO:
+
+
+/**
+ * Route to change user name.
+ * @name post/changeUserName
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 exports.changeUserName = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
   //validate posted data
@@ -158,7 +215,17 @@ exports.changeUserName = catchAsync(async (req, res, next) => {
   });
 });
 
-//TODO:
+
+
+/**
+ * Route to send password reset email.
+ * @name post/forgetUserPassword
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 exports.forgetUserPassword = catchAsync(async (req, res, next) => {
   //validate user data
   const { value, error } = emailValidator(req.body.email);
@@ -189,8 +256,19 @@ exports.forgetUserPassword = catchAsync(async (req, res, next) => {
       "reset password email was sent to your email please check your inbox",
   });
 });
-//TODO: create route to change user password
-exports.changePassword = catchAsync(async (req, res, next) => {
+
+
+
+/**
+ * Route to change user password.
+ * @name post/changeUserPassword
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+exports.changeUserPassword = catchAsync(async (req, res, next) => {
   //get user id
   const { _id } = req.user;
   //validate user data
@@ -213,7 +291,17 @@ exports.changePassword = catchAsync(async (req, res, next) => {
   );
 });
 
-//TODO:
+
+
+/**
+ * Route to reset user password after receiving password reset email .
+ * @name post/resetUserPassword
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 exports.resetUserPassword = catchAsync(async (req, res, next) => {
   //validate user new password
   const jwtToken = req.params.userToken;
@@ -243,7 +331,18 @@ exports.resetUserPassword = catchAsync(async (req, res, next) => {
     message: "password updated successfully please try to login",
   });
 });
-//TODO:
+
+
+
+/**
+ * Route to verify new registerd accounts.
+ * @name post/verifyAccount
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
 exports.verifyAccount = catchAsync(async (req, res) => {
   const userToken = req.params.userToken;
   if (!userToken)
