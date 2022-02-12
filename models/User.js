@@ -12,6 +12,9 @@ const userSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  avatar: {
+    type: String,
+  },
   password: {
     type: String,
     required: true,
@@ -32,5 +35,9 @@ const userSchema = mongoose.Schema({
     select: false
   },
 });
+
+userSchema.methods.setUserAvatar = function(){
+  this.avatar = `https://avatars.dicebear.com/api/identicon/${this.userName}.svg`;
+}
 
 module.exports = mongoose.model("users", userSchema);

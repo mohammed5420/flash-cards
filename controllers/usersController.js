@@ -27,7 +27,6 @@ exports.signupUser = catchAsync(async (req, res, next) => {
 
   //encrypt user password
   const hashedPassword = hashPassword(value.password);
-
   //create new user object
   const newUser = new User({
     userName: value.userName,
@@ -35,6 +34,7 @@ exports.signupUser = catchAsync(async (req, res, next) => {
     password: hashedPassword,
   });
   //save the user to database
+  newUser.setUserAvatar();
   const savedUser = await newUser.save();
   const token = jwt.sign(
     { _id: savedUser._id },
@@ -66,25 +66,32 @@ exports.loginUser = catchAsync(async (req, res, next) => {
   if (error) return next(new AppError(error.details[0].message, 406));
 
   //login the user
-  const isSignedEmail = await User.findOne(
+  const user = await User.findOne(
     { email: value.email },
-    { password: 1, isVerified: 1 }
+    { password: 1, isVerified: 1,userName: 1, email: 1,avatar: 1}
   );
-  if (isSignedEmail.length === 0)
+  if (user.length === 0)
     return res.json({ message: "this email isn't registerd please signup" });
-  const hashedPassword = isSignedEmail.password;
+  const hashedPassword = user.password;
   if (!comparPasswords(value.password, hashedPassword))
     return next(new AppError("email or password is incorrect", 403));
 
   //check if the account is verified
-  if (!isSignedEmail.isVerified)
+  if (!user.isVerified)
     return next(new AppError("This account is not verified!", 403));
 
   //login the user by sending his JWT token
-  const token = jwt.sign({ _id: isSignedEmail._id }, process.env.SECRET_KEY, {
-    expiresIn: "5m",
+  const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
+    expiresIn: "10m",
   });
-  return res.json({ jwtToken: token });
+  console.log(user.avatar);
+  const userObject = {
+    useName: user.userName,
+    userId: user._id,
+    email: user.email,
+    avatar: user.avatar
+  }
+  return res.json({status:"success",user: userObject, jwtToken: token });
 });
 //TODO:
 exports.changeAccountEmail = catchAsync(async (req, res, next) => {
