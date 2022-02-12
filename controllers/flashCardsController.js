@@ -89,8 +89,7 @@ exports.getFavoriteFlashCards = catchAsync(async (req, res, next) => {
     .limit(limit);
   if (!favoriteFlashCards)
     return next(
-      new AppError("No favorite card found with that author ID",
-      404)
+      new AppError("No favorite card found with that author ID", 404)
     );
   if (favoriteFlashCards.length === 0 && page === 1) {
     return res.status(201).json({

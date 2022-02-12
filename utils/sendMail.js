@@ -39,7 +39,7 @@ exports.sendEmailMessage = async (message) => {
   );
 
   console.log(messageUrl);
-  const source = fs.readFileSync(templatePath, 'utf-8').toString();
+  const source = fs.readFileSync(templatePath, "utf-8").toString();
   const htmlTemplate = ejs.render(source, {
     userName: message.userName,
     url: messageUrl,

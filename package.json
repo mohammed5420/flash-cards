@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "SET NODE_ENV=development&& docker compose start && nodemon server.js",
-    "start:prod": "SET NODE_ENV=production&& docker compose start && nodemon server.js"
+    "start:prod": "SET NODE_ENV=production&& docker compose start && nodemon server.js",
+    "test":"jest"
   },
   "keywords": [],
   "author": "",
@@ -19,12 +20,17 @@
     "handlebars": "^4.7.7",
     "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "mongoose": "^6.0.14",
+    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15"
   },
   "config": {
     "commitizen": {
       "path": "git-cz"
     }
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
