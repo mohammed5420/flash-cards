@@ -4,6 +4,8 @@
  */
 
 const User = require("./../models/User");
+const Card = require("./../models/FlashCard");
+const Game = require("./../models/Game");
 const {
   loginFormValidator,
   signupFormValidator,
@@ -358,3 +360,28 @@ exports.verifyAccount = catchAsync(async (req, res) => {
   });
   return res.redirect("/users/login");
 });
+
+/**
+ * Route to delete user account.
+ * @name post/deleteUserAccount
+ * @function
+ * @memberof module:routers/Auth
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+
+exports.deleteUserAccount = catchAsync(async (req,res,next) => {
+  //Get user ID
+  const {_id} = req.user;
+  //find and delete user 
+  const user = await User.findByIdAndDelete(_id);
+  if(!user){
+    return new AppError("There is no user with this ID",403);
+  }
+  //find and delete all user flashCards and game history
+  await Card.deleteMany({authorID: user._id});
+  await Game.deleteOne({playerId: user._id});
+  //redirect to signup page
+  return res.send({status: "success",message:"account deleted successfully!"});
+})
