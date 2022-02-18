@@ -249,7 +249,7 @@ exports.forgetUserPassword = catchAsync(async (req, res, next) => {
     subject: `Email Verification For ${process.env.APPLICATION_NAME}`,
     text: "Email verification",
     userID: userToken,
-    type: "accountVerification",
+    type: "resetEmail",
     userName: user.userName,
     url: "resetpassword",
   });
