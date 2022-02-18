@@ -27,7 +27,10 @@ routes.post("/login", usersController.loginUser);
 routes.post("/username", verifyToken, usersController.changeUserName);
 
 routes.post("/forgetPassword", usersController.forgetUserPassword);
-
+/**
+ * Route to delete user account
+ */
+routes.get("/delete",verifyToken,usersController.deleteUserAccount);
 routes.get("/verifyaccount/:userToken", usersController.verifyAccount);
 routes.post("/resetpassword/:userToken",usersController.resetUserPassword);
 module.exports = routes;
