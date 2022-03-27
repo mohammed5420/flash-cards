@@ -6,13 +6,16 @@
   "scripts": {
     "start": "SET NODE_ENV=development&& docker compose start && nodemon server.js",
     "start:prod": "SET NODE_ENV=production&& docker compose start && nodemon server.js",
-    "test":"jest"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@joi/date": "^2.1.0",
+    "admin-bro": "^4.0.1",
+    "admin-bro-expressjs": "^2.1.1",
+    "admin-bro-mongoose": "^0.5.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
@@ -23,6 +26,7 @@
     "moment": "^2.29.1",
     "mongoose": "^6.0.14",
     "nodemailer": "^6.7.2",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^2.0.15"
   },
   "config": {

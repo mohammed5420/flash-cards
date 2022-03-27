@@ -7,6 +7,11 @@ const userSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   email: {
     type: String,
     unique: true,

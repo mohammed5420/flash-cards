@@ -109,7 +109,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
     return next(new AppError("This account is not verified!", 403));
 
   //login the user by sending his JWT token
-  const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
+  const token = jwt.sign({ _id: user._id,isAdmin: user.isAdmin }, process.env.SECRET_KEY, {
     expiresIn: "10m",
   });
   console.log(user.avatar);

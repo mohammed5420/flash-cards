@@ -9,6 +9,7 @@ require("dotenv").config();
 const AppError = require("./utils/errorsHandler");
 const globalHandler = require("./controllers/errorController");
 
+
 //Middleware
 app.use(express.json());
 app.use(
