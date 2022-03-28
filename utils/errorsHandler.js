@@ -1,3 +1,6 @@
+/**
+ * @description AppError generator extends from Error class
+ */
 class AppError extends Error {
   constructor(message, statusCode) {
     super(message);

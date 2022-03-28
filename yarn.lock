@@ -3050,6 +3050,11 @@
   "resolved" "https://registry.npmjs.org/destroy/-/destroy-1.0.4.tgz"
   "version" "1.0.4"
 
+"detect-browser@^5.3.0":
+  "integrity" "sha512-53rsFbGdwMwlF7qvCt0ypLM5V5/Mbl0szB7GPN8y9NCcbknYOeVVXdrXEq+90IwAfrrzt6Hd+u2E2ntakICU8w=="
+  "resolved" "https://registry.npmjs.org/detect-browser/-/detect-browser-5.3.0.tgz"
+  "version" "5.3.0"
+
 "detect-indent@^4.0.0":
   "integrity" "sha1-920GQ1LN9Docts5hnE7jqUdd4gg="
   "resolved" "https://registry.npmjs.org/detect-indent/-/detect-indent-4.0.0.tgz"
@@ -6873,6 +6878,11 @@
   "version" "3.1.5"
   dependencies:
     "is-typedarray" "^1.0.0"
+
+"ua-parser-js@^1.0.2":
+  "integrity" "sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg=="
+  "resolved" "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-1.0.2.tgz"
+  "version" "1.0.2"
 
 "uglify-js@^3.1.4":
   "integrity" "sha512-qZukoSxOG0urUTvjc2ERMTcAy+BiFh3weWAkeurLwjrCba73poHmG3E36XEjd/JGukMzwTL7uCxZiAexj8ppvQ=="

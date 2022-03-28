@@ -6,7 +6,7 @@ const AppError = require("./errorsHandler");
 const fs = require("fs");
 /**
  *
- * @param {*} message {userEmail,subject,text,type,templateParams}
+ * @param {Object} message {userEmail,subject,text,type,templateParams}
  * @description send email message to user email by given message object
  */
 exports.sendEmailMessage = async (message) => {
@@ -20,8 +20,6 @@ exports.sendEmailMessage = async (message) => {
       pass: process.env.SENDGRID_PASSWORD,
     },
   });
-
-  console.log(message);
 
   // send mail with defined transport object
   const messageUrl =
@@ -37,12 +35,11 @@ exports.sendEmailMessage = async (message) => {
     }`
   );
 
-  // console.log(messageUrl);
+  // Read ejs email template
   const source = fs.readFileSync(templatePath, "utf-8").toString();
-  const htmlTemplate = ejs.render(source, {
-    userName: message.userName,
-    url: messageUrl,
-  });
+  const htmlTemplate = ejs.render(source, { message });
+
+  // Send an email with user data and email template
   try {
     let info = await transporter.sendMail({
       from: process.env.EMAIL_ADDRESS, // sender address
@@ -52,14 +49,13 @@ exports.sendEmailMessage = async (message) => {
       html: htmlTemplate, // html body
     });
 
-    console.log("Message sent: %s", info.messageId);
+    //console.log("Message sent: %s", info.messageId);
     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
     // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
+    //console.log("Preview URL: %s", nodeMailer.getTestMessageUrl(info));
   } catch (error) {
     let errorApp = new AppError(error.message, 403);
-    console.log({error})
-    console.log(errorApp.message);
+    console.error("⚡ ", errorApp.message);
   }
 };

@@ -8,7 +8,7 @@ require("./db.config");
 require("dotenv").config();
 const AppError = require("./utils/errorsHandler");
 const globalHandler = require("./controllers/errorController");
-
+const userAgent = require("./middleware/userAgent");
 
 //Middleware
 app.use(express.json());
@@ -17,6 +17,7 @@ app.use(
     extended: true,
   })
 );
+app.use(userAgent);
 
 //API Routes
 app.use("/api/v1/users", authRoutes);

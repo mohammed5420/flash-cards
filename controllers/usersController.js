@@ -20,6 +20,7 @@ const { hashPassword, comparPasswords } = require("./../utils/hashPassword");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/errorsHandler");
 
+const userBrowser = require("./../utils/browserDetector.js");
 
 /**
  * Route to signup new users.
@@ -60,6 +61,7 @@ exports.signupUser = catchAsync(async (req, res, next) => {
       expiresIn: "30d",
     }
   );
+  const userInfo = userBrowser(req);
 
   //send account verifiction email
   sendEmailMessage({
@@ -70,14 +72,14 @@ exports.signupUser = catchAsync(async (req, res, next) => {
     type: "accountVerification",
     userName: savedUser.userName,
     url: "verifyaccount",
+    os: userInfo.os.name,
+    browser: userInfo.browser.name,
   });
   return res.json({
     status: "success",
     message: "user is saved successfully please verify your account",
   });
 });
-
-
 
 /**
  * Route to login users.
@@ -96,9 +98,9 @@ exports.loginUser = catchAsync(async (req, res, next) => {
   //login the user
   const user = await User.findOne(
     { email: value.email },
-    { password: 1, isVerified: 1,userName: 1, email: 1,avatar: 1}
+    { password: 1, isVerified: 1, userName: 1, email: 1, avatar: 1 }
   );
-  if (user.length === 0)
+  if (!user)
     return res.json({ message: "this email isn't registerd please signup" });
   const hashedPassword = user.password;
   if (!comparPasswords(value.password, hashedPassword))
@@ -109,20 +111,22 @@ exports.loginUser = catchAsync(async (req, res, next) => {
     return next(new AppError("This account is not verified!", 403));
 
   //login the user by sending his JWT token
-  const token = jwt.sign({ _id: user._id,isAdmin: user.isAdmin }, process.env.SECRET_KEY, {
-    expiresIn: "10m",
-  });
+  const token = jwt.sign(
+    { _id: user._id, isAdmin: user.isAdmin },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: "10m",
+    }
+  );
   console.log(user.avatar);
   const userObject = {
     useName: user.userName,
     userId: user._id,
     email: user.email,
-    avatar: user.avatar
-  }
-  return res.json({status:"success",user: userObject, jwtToken: token });
+    avatar: user.avatar,
+  };
+  return res.json({ status: "success", user: userObject, jwtToken: token });
 });
-
-
 
 /**
  * Route to change user email account.
@@ -146,6 +150,8 @@ exports.changeAccountEmail = catchAsync(async (req, res, next) => {
   const userToken = jwt.sign({ _id }, process.env.RESET_SECRET_KEY, {
     expiresIn: "1d",
   });
+
+  const userInfo = userBrowser(req);
   sendEmailMessage({
     userEmail: value.email,
     subject: `Email Verification For ${process.env.APPLICATION_NAME}`,
@@ -154,14 +160,14 @@ exports.changeAccountEmail = catchAsync(async (req, res, next) => {
     type: "accountVerification",
     userName: userName,
     url: "verifyaccount",
+    os: userInfo.os.name,
+    browser: userInfo.browser.name,
   });
   req.json({
     status: "success",
     message: "verification email was sent to your new account",
   });
 });
-
-
 
 /**
  * Route to verify new user email.
@@ -191,8 +197,6 @@ exports.verifyNewAccountEmail = catchAsync(async (req, res, next) => {
   res.redirect("/users/login");
 });
 
-
-
 /**
  * Route to change user name.
  * @name post/changeUserName
@@ -216,8 +220,6 @@ exports.changeUserName = catchAsync(async (req, res, next) => {
     message: "username successfully changed",
   });
 });
-
-
 
 /**
  * Route to send password reset email.
@@ -259,8 +261,6 @@ exports.forgetUserPassword = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
 /**
  * Route to change user password.
  * @name post/changeUserPassword
@@ -292,8 +292,6 @@ exports.changeUserPassword = catchAsync(async (req, res, next) => {
     }
   );
 });
-
-
 
 /**
  * Route to reset user password after receiving password reset email .
@@ -334,8 +332,6 @@ exports.resetUserPassword = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
 /**
  * Route to verify new registerd accounts.
  * @name post/verifyAccount
@@ -371,17 +367,20 @@ exports.verifyAccount = catchAsync(async (req, res) => {
  * @param {callback} middleware - Express middleware.
  */
 
-exports.deleteUserAccount = catchAsync(async (req,res,next) => {
+exports.deleteUserAccount = catchAsync(async (req, res, next) => {
   //Get user ID
-  const {_id} = req.user;
-  //find and delete user 
+  const { _id } = req.user;
+  //find and delete user
   const user = await User.findByIdAndDelete(_id);
-  if(!user){
-    return new AppError("There is no user with this ID",403);
+  if (!user) {
+    return new AppError("There is no user with this ID", 403);
   }
   //find and delete all user flashCards and game history
-  await Card.deleteMany({authorID: user._id});
-  await Game.deleteOne({playerId: user._id});
+  await Card.deleteMany({ authorID: user._id });
+  await Game.deleteOne({ playerId: user._id });
   //redirect to signup page
-  return res.send({status: "success",message:"account deleted successfully!"});
-})
+  return res.send({
+    status: "success",
+    message: "account deleted successfully!",
+  });
+});

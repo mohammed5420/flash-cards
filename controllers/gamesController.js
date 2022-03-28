@@ -31,9 +31,13 @@ exports.getGameCards = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Save game history
+ * Route to save game history
+ * @name post/saveGameStatus
+ * @function
+ * @memberof module:routers/Games
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
  */
-
 exports.saveGameStats = catchAsync(async (req, res, next) => {
   //Get user id
   const { _id } = req.user;
@@ -97,9 +101,13 @@ exports.saveGameStats = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Get Game history
+ * Route to display user games history
+ * @name GET/getGameHistory
+ * @function
+ * @memberof module:routers/Games
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
  */
-
 exports.getGameHistory = catchAsync(async (req, res, next) => {
   //Get user Id
   const { _id } = req.user;
@@ -118,9 +126,13 @@ exports.getGameHistory = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Get All Failed Cards
+ * Route to display user wrong cards history
+ * @name GET/getFailedCards
+ * @function
+ * @memberof module:routers/Games
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
  */
-
 exports.getFailedCards = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
   const [wrongAnswers] = await Game.find(
@@ -141,7 +153,17 @@ exports.getFailedCards = catchAsync(async (req, res, next) => {
 exports.updateGameStats = catchAsync(async (req, res, next) => {});
 
 /**
- * Delete Game history
+ * Route to display user wrong cards history
+ * @name GET/getFailedCards
+ * @function
+ * @memberof module:routers/Games
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
  */
 
-exports.deleteGameStats = catchAsync(async (req, res, next) => {});
+exports.deleteGameHistory = catchAsync(async (req, res, next) => {
+  const { _id } = req.user;
+
+  await Game.deleteOne({ playerId: _id });
+  return res.json({ status: "success", message: "History was deleted successfully" });
+});
