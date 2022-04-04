@@ -1,6 +1,6 @@
 /**
- * 
- * @param {async function} callback 
+ * utility function to catch errors on async functions
+ * @param {function} callback
  * @returns send new error for express error handler
  */
 module.exports = (callback) => {

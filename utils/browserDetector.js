@@ -6,7 +6,6 @@ function userBrowser(req) {
   parser.setUA(userAgent);
 
   let result = parser.getResult();
-  console.log({ result });
 
   return {
     os: result.os,

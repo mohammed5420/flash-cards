@@ -1,3 +1,9 @@
+/**
+ * Express router to mount all app routes.
+ * @type {object}
+ * @const
+ */
+
 const routes = require("express").Router();
 const usersController = require("./../controllers/usersController");
 const verifyToken = require("./../middleware/verifyToken");

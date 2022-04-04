@@ -86,7 +86,7 @@ const cardID = Joi.string().min(12).required();
 const gameStatsSchema = Joi.object({
   wrongAnswers: Joi.array().items(cardID).allow(null),
   correctAnswers: Joi.array().items(cardID).allow(null),
-  score: Joi.number().max(5).min(0),
+  // score: Joi.number().max(5).min(0),
 });
 
 const updateFlashCardValidator = (requestBody) => {
