@@ -125,6 +125,15 @@ const loginUser = catchAsync(async (req, res, next) => {
     email: user.email,
     avatar: user.avatar,
   };
+  const cookieOptions = {
+    secure: false,
+    httpOnly: true,
+    expires: new Date(Date.now() + 8 * 3600000),
+  };
+  if (process.env.ENVIRONMENT === "production") cookieOptions.secure = true;
+
+  res.cookie("jwtToken", token, cookieOptions);
+
   return res.json({ status: "success", user: userObject, jwtToken: token });
 });
 
