@@ -7,6 +7,9 @@
 const routes = require("express").Router();
 const usersController = require("./../controllers/usersController");
 const verifyToken = require("./../middleware/verifyToken");
+const { upload } = require("../middleware/multer");
+const {imageResizer} = require("../middleware/imageResizer");
+
 /**
  * ### Auth Route
  * #### 1- Signup
@@ -33,10 +36,17 @@ routes.post("/login", usersController.loginUser);
 routes.post("/username", verifyToken, usersController.changeUserName);
 
 routes.post("/forgetPassword", usersController.forgetUserPassword);
+routes.post(
+  "/updateprofile",
+  verifyToken,
+  upload.single("profileImage"),
+  imageResizer,
+  usersController.updateProfileImage
+);
 /**
  * Route to delete user account
  */
-routes.get("/delete",verifyToken,usersController.deleteUserAccount);
+routes.get("/delete", verifyToken, usersController.deleteUserAccount);
 routes.get("/verifyaccount/:userToken", usersController.verifyAccount);
-routes.post("/resetpassword/:userToken",usersController.resetUserPassword);
+routes.post("/resetpassword/:userToken", usersController.resetUserPassword);
 module.exports = routes;

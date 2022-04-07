@@ -119,7 +119,6 @@ const loginUser = catchAsync(async (req, res, next) => {
       expiresIn: "10d",
     }
   );
-  console.log(user.avatar);
   const userObject = {
     useName: user.userName,
     userId: user._id,
@@ -295,6 +294,33 @@ const changeUserPassword = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * Route to upload new profile picture.
+ * @name post/updateProfileImage
+ * @function
+ * @memberof module:controllers/usersController
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+
+const updateProfileImage = catchAsync(async (req, res, next) => {
+  const { _id } = req.user;
+  if (req.file == null) {
+    return res.status(400).json({
+      status: "invalid",
+      message: "please make sure to upload your profile image",
+    });
+  }
+  console.log(req.file.filename);
+
+  const user = await User.updateOne({ _id }, { avatar: req.file.filename });
+  res.status(200).json({
+    status: "success",
+    message: "profile picture updated successfully",
+  });
+});
+
+/**
  * Route to reset user password after receiving password reset email .
  * @name post/resetUserPassword
  * @function
@@ -397,4 +423,5 @@ module.exports = {
   verifyNewAccountEmail,
   resetUserPassword,
   changeUserPassword,
+  updateProfileImage,
 };
