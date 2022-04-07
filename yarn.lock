@@ -3973,6 +3973,14 @@
   dependencies:
     "react-is" "^16.7.0"
 
+"hpp@^0.2.3":
+  "integrity" "sha512-4zDZypjQcxK/8pfFNR7jaON7zEUpXZxz4viyFmqjb3kWNWAHsLEUmWXcdn25c5l76ISvnD6hbOGO97cXUI3Ryw=="
+  "resolved" "https://registry.npmjs.org/hpp/-/hpp-0.2.3.tgz"
+  "version" "0.2.3"
+  dependencies:
+    "lodash" "^4.17.12"
+    "type-is" "^1.6.12"
+
 "html-encoding-sniffer@^2.0.1":
   "integrity" "sha512-D5JbOMBIR/TVZkubHT+OyT2705QvogUW4IBn6nHd756OwieSF9aDYFj4dv6HHEVGYbHaLETa3WggZYWWMyy3ZQ=="
   "resolved" "https://registry.npmjs.org/html-encoding-sniffer/-/html-encoding-sniffer-2.0.1.tgz"
@@ -5147,7 +5155,7 @@
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
   "version" "3.10.1"
 
-"lodash@^4.1.0", "lodash@^4.15.0", "lodash@^4.17.11", "lodash@^4.17.20", "lodash@^4.17.4", "lodash@^4.7.0":
+"lodash@^4.1.0", "lodash@^4.15.0", "lodash@^4.17.11", "lodash@^4.17.12", "lodash@^4.17.20", "lodash@^4.17.4", "lodash@^4.7.0":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   "version" "4.17.21"
@@ -7216,7 +7224,7 @@
   "resolved" "https://registry.npmjs.org/type-fest/-/type-fest-0.21.3.tgz"
   "version" "0.21.3"
 
-"type-is@^1.6.4", "type-is@~1.6.17", "type-is@~1.6.18":
+"type-is@^1.6.12", "type-is@^1.6.4", "type-is@~1.6.17", "type-is@~1.6.18":
   "integrity" "sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g=="
   "resolved" "https://registry.npmjs.org/type-is/-/type-is-1.6.18.tgz"
   "version" "1.6.18"

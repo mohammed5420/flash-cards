@@ -13,6 +13,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitizer = require("express-mongo-sanitize");
 const xss = require("xss-clean");
+const hpp = require("hpp");
 
 const limiter = rateLimit({
   max: 150,
@@ -43,6 +44,9 @@ app.use(
 
 //Get User Agent
 app.use(userAgent);
+
+//prevent parameters pollution
+app.use(hpp());
 
 //API Routes
 app.use("/api/v1/users", authRoutes);
