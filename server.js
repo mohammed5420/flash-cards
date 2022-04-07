@@ -11,6 +11,8 @@ const globalHandler = require("./controllers/errorController");
 const userAgent = require("./middleware/userAgent");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const mongoSanitizer = require("express-mongo-sanitize");
+const xss = require("xss-clean");
 
 const limiter = rateLimit({
   max: 150,
@@ -26,7 +28,11 @@ app.use(helmet());
 app.use("/api", limiter);
 
 //Pars JSON Data
-app.use(express.json({limit: "10KB"}));
+app.use(express.json({ limit: "10KB" }));
+
+//Data sanitizing
+app.use(mongoSanitizer());
+app.use(xss());
 
 //Pars urlencoded
 app.use(
@@ -35,7 +41,7 @@ app.use(
   })
 );
 
-//Get User Agent 
+//Get User Agent
 app.use(userAgent);
 
 //API Routes
