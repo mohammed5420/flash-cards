@@ -10,20 +10,32 @@ const AppError = require("./utils/errorsHandler");
 const globalHandler = require("./controllers/errorController");
 const userAgent = require("./middleware/userAgent");
 const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 const limiter = rateLimit({
   max: 150,
   windowMs: 60 * 60 * 1000,
   message: "too many requests from this ip please try again later",
 });
+
 //Middleware
+//set HTTP security headers
+app.use(helmet());
+
+//Prevent to many request from the same ID
 app.use("/api", limiter);
-app.use(express.json());
+
+//Pars JSON Data
+app.use(express.json({limit: "10KB"}));
+
+//Pars urlencoded
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
+
+//Get User Agent 
 app.use(userAgent);
 
 //API Routes
