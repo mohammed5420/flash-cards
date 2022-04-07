@@ -14,7 +14,7 @@ const helmet = require("helmet");
 const mongoSanitizer = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
-
+const morgan = require("morgan");
 const limiter = rateLimit({
   max: 150,
   windowMs: 60 * 60 * 1000,
@@ -47,6 +47,11 @@ app.use(userAgent);
 
 //prevent parameters pollution
 app.use(hpp());
+
+if (process.env.NODE_ENV === "development") {
+  console.log(process.env.NODE_ENV);
+  app.use(morgan("dev"));
+}
 
 //API Routes
 app.use("/api/v1/users", authRoutes);

@@ -130,7 +130,7 @@ const loginUser = catchAsync(async (req, res, next) => {
     httpOnly: true,
     expires: new Date(Date.now() + 8 * 3600000),
   };
-  if (process.env.ENVIRONMENT === "production") cookieOptions.secure = true;
+  if (process.env.NODE_EnV === "production") cookieOptions.secure = true;
 
   res.cookie("jwtToken", token, cookieOptions);
 
