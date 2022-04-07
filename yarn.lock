@@ -3464,6 +3464,11 @@
   dependencies:
     "formidable" "^1.0.17"
 
+"express-rate-limit@^6.3.0":
+  "integrity" "sha512-932Io1VGKjM3ppi7xW9sb1J5nVkEJSUiOtHw2oE+JyHks1e+AXuOBSXbJKM0mcXwEnW1TibJibQ455Ow1YFjfg=="
+  "resolved" "https://registry.npmjs.org/express-rate-limit/-/express-rate-limit-6.3.0.tgz"
+  "version" "6.3.0"
+
 "express-session@>=1.15.6":
   "integrity" "sha512-mPcYcLA0lvh7D4Oqr5aNJFMtBMKPLl++OKKxkHzZ0U0oDq1rpKBnkR5f5vCHR26VeArlTOEF9td4x5IjICksRQ=="
   "resolved" "https://registry.npmjs.org/express-session/-/express-session-1.17.2.tgz"
@@ -3478,7 +3483,7 @@
     "safe-buffer" "5.2.1"
     "uid-safe" "~2.1.5"
 
-"express@^4.17.1", "express@>=4.16.4":
+"express@^4", "express@^4.17.1", "express@>=4.16.4":
   "integrity" "sha512-mHJ9O79RqluphRrcw2X/GTh3k9tVv8YcoyY4Kkh4WDMUYKRZUq0h1o0w2rrrxBqM7VoeUVqgb27xlEMXTnYt4g=="
   "resolved" "https://registry.npmjs.org/express/-/express-4.17.1.tgz"
   "version" "4.17.1"
