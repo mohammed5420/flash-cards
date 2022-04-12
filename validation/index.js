@@ -39,14 +39,14 @@ const newPasswordSchema = Joi.object({
 });
 
 const resetPasswordSchema = Joi.object({
-  new_password: Joi.string().min(6).required().label("new password").messages({
+  newPassword: Joi.string().min(6).required().label("new password").messages({
     "string.base": `password should be a type of 'text'`,
     "string.empty": `please enter your new password`,
     "string.min": `use at least {#limit} characters`,
     "string.max": `password should have a maximum length of {#limit}`,
     "any.required": `password is a required field`,
   }),
-  confirm_password: Joi.ref("new_password"),
+  confirmPassword: Joi.ref("new_password"),
 });
 
 const createFlashCardSchema = Joi.object({

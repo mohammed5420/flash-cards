@@ -21,6 +21,12 @@ const limiter = rateLimit({
   message: "too many requests from this ip please try again later",
 });
 
+//documentation
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDocs = require("swagger-jsdoc");
+const {options} = require("./swagger");
+const swaggerDoc = swaggerJsDocs(options);
+
 //Middleware
 //set HTTP security headers
 app.use(helmet());
@@ -53,10 +59,14 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+
 //API Routes
 app.use("/api/v1/users", authRoutes);
 app.use("/api/v1/flashcards", verifyToken, flashCardRoutes);
 app.use("/api/v1/flashcards/games", verifyToken, gamesRoutes);
+
+//swagger documentation
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //Unknown Routes
 app.use("*", (res, req, next) => {

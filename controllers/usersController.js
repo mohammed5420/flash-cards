@@ -120,7 +120,7 @@ const loginUser = catchAsync(async (req, res, next) => {
     }
   );
   const userObject = {
-    useName: user.userName,
+    userName: user.userName,
     userId: user._id,
     email: user.email,
     avatar: user.avatar,
@@ -349,7 +349,7 @@ const resetUserPassword = catchAsync(async (req, res, next) => {
   const { _id } = jwt.verify(jwtToken, process.env.RESET_SECRET_KEY);
 
   //crypt user password
-  const hashedPassword = hashPassword(value.new_password);
+  const hashedPassword = hashPassword(value.newPassword);
 
   //find the user and update user password
   await User.updateOne(
@@ -415,6 +415,7 @@ const deleteUserAccount = catchAsync(async (req, res, next) => {
   await Card.deleteMany({ authorID: user._id });
   await Game.deleteOne({ playerId: user._id });
   //redirect to signup page
+  //TODO: remove jwt from client cookie
   return res.send({
     status: "success",
     message: "account deleted successfully!",
