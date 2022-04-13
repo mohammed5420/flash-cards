@@ -114,7 +114,7 @@ routes.post("/signup", usersController.signupUser);
  * @swagger
  * /login:
  *   post:
- *     summary: route to login users
+ *     summary: Login users
  *     tags: [User]
  *     requestBody:
  *       required: true
@@ -180,7 +180,7 @@ routes.post("/login", usersController.loginUser);
  * @swagger
  * /username:
  *   post:
- *     summary: route to change user name
+ *     summary: Change user name
  *     tags: [User]
  *     requestBody:
  *       required: true
@@ -227,7 +227,7 @@ routes.post("/username", verifyToken, usersController.changeUserName);
  * @swagger
  * /forgetPassword:
  *   post:
- *     summary: send reset password email
+ *     summary: Send reset password email
  *     tags: [User]
  *     requestBody:
  *       required: true
@@ -275,7 +275,7 @@ routes.post("/forgetPassword", usersController.forgetUserPassword);
  * @swagger
  * /updateprofile:
  *   patch:
- *     summary: route to update user profile image
+ *     summary: Update user profile image
  *     consumes:
  *       - multipart/form-data
  *     parameters:
@@ -326,7 +326,7 @@ routes.patch(
  * @swagger
  * /delete:
  *   get:
- *     summary: route to delete user account
+ *     summary: Delete user account
  *     tags: [User]
  *     requestBody:
  *       required: false
@@ -365,7 +365,7 @@ routes.get("/delete", verifyToken, usersController.deleteUserAccount);
  * @swagger
  * /verifyaccount/{userToken}:
  *   get:
- *     summary: route to verify user account
+ *     summary: Verify user account
  *     parameters:
  *       - in: path
  *         name: userToken
@@ -412,7 +412,7 @@ routes.get("/verifyaccount/:userToken", usersController.verifyAccount);
  * @swagger
  * /resetpassword/{userToken}:
  *   post:
- *     summary: route reset account password
+ *     summary: Route reset account password
  *     parameters:
  *       - in: path
  *         name:  userToken
