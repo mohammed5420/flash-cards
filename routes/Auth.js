@@ -274,15 +274,16 @@ routes.post("/forgetPassword", usersController.forgetUserPassword);
 /**
  * @swagger
  * /updateprofile:
- *   patch:
+ *   post:
  *     summary: Update user profile image
  *     consumes:
  *       - multipart/form-data
  *     parameters:
- *        - in: formData
- *          name: profileImage
- *          type: file
- *          description: The file to upload.
+ *       - in: formData
+ *         name: profileImage
+ *         required: true
+ *         type: file
+ *         description: The file to upload.
  *     tags: [User]
  *     responses:
  *       200:
@@ -314,7 +315,7 @@ routes.post("/forgetPassword", usersController.forgetUserPassword);
  */
 
 
-routes.patch(
+routes.post(
   "/updateprofile",
   verifyToken,
   upload.single("profileImage"),
