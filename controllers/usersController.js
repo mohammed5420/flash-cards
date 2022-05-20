@@ -78,7 +78,8 @@ const signupUser = catchAsync(async (req, res, next) => {
   });
   return res.json({
     status: "success",
-    message: "user is saved successfully please check your inbox to verify your account",
+    message:
+      "user is saved successfully please check your inbox to verify your account",
   });
 });
 
@@ -125,12 +126,13 @@ const loginUser = catchAsync(async (req, res, next) => {
     email: user.email,
     avatar: user.avatar,
   };
+  const isProduction = process.env.NODE_ENV == "production";
   const cookieOptions = {
-    secure: false,
+    secure: isProduction ? true : false,
     httpOnly: true,
     expires: new Date(Date.now() + 8 * 3600000),
   };
-  if (process.env.NODE_EnV === "production") cookieOptions.secure = true;
+  // if (process.env.NODE_EnV === "production") cookieOptions.secure = true;
 
   res.cookie("jwtToken", token, cookieOptions);
 
