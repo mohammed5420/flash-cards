@@ -35,11 +35,11 @@ const route = require("express").Router();
  *                 properties:
  *                   _id:
  *                     type: string
- *                     description: ID reference to Card 
+ *                     description: ID reference to Card
  *               score:
  *                 type: number
  *                 description: The score of single game
- *               playedAt: 
+ *               playedAt:
  *                 type: date
  *                 description: Date when the game played
  *         highestScore:
@@ -53,14 +53,219 @@ const route = require("express").Router();
  *           description: The date of creating this document
  */
 
-route
-    .get("/qa",gamesController.getGameCards)
-    .post("/qa", gamesController.saveGameStats)
-    .patch("/qa", gamesController.updateGameStats)
+/**
+ * @swagger
+ * /qa:
+ *   get:
+ *     summary: Get game's cards
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: The length of the documents in the response object
+ *     tags: [Game]
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: list of flashcards
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 length:
+ *                   type: integer
+ *                   description: request status
+ *                 data:
+ *                   type: array
+ *                   description: The list of the flashcards
+ *                   items:
+ *                      schema:
+ *                         $ref: '#/components/schemas/Card'
+ *       406:
+ *         description: invalid data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Some server error
+ */
+route.get("/qa", gamesController.getGameCards);
+/**
+ * @swagger
+ * /qa:
+ *   post:
+ *     summary: Receive game statistics
+ *     tags: [Game]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               correctAnswers:
+ *                 type: array
+ *                 description: Array of correct flashcards ids
+ *               wrongAnswers:
+ *                 type: string
+ *                 description: Array of wrong flashcards ids
+ *     responses:
+ *       200:
+ *         description: game stats saved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 message:
+ *                   type: string
+ *       406:
+ *         description: invalid data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 message:
+ *                   type: string
+ *                 invalidInput:
+ *                   type: array
+ *                   description: Array of invalid inputs
+ *       500:
+ *         description: Some server error
+ */
+route.post("/qa", gamesController.saveGameStats);
+/**
+ * @swagger
+ * /qa/game-history:
+ *   get:
+ *     summary: Stats about games history
+ *     tags: [Game]
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: object contains user games history
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Game'
+ *       406:
+ *         description: invalid data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Some server error
+ */
+route.get("/qa/game-history", gamesController.getGameHistory);
+/**
+ * @swagger
+ * /qa/wrong-cards:
+ *   get:
+ *     summary: list of wrong flashcards
+ *     tags: [Game]
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: list of wrong flashcards
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 length:
+ *                   type: integer
+ *                   description: request status
+ *                 data:
+ *                   type: array
+ *                   description: The list of the flashcards
+ *                   items:
+ *                      schema:
+ *                         $ref: '#/components/schemas/Card'
+ *       406:
+ *         description: invalid data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Some server error
+ */
 
-route   
-    .get("/qa/game-history",gamesController.getGameHistory)
-    .get("/qa/wrong-cards",gamesController.getFailedCards)
-    .delete("/qa/delete-history", gamesController.deleteGameHistory)
+route.get("/qa/wrong-cards", gamesController.getFailedCards);
+/**
+ * @swagger
+ * /qa/delete-history:
+ *   delete:
+ *     summary: Delete user games history
+ *     tags: [Game]
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: History was deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 message:
+ *                   type: string
+ *       406:
+ *         description: invalid data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: request status
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Some server error
+ */
+route.delete("/qa/delete-history", gamesController.deleteGameHistory);
 module.exports = route;
-    

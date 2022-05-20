@@ -17,7 +17,7 @@ const { gameStatsValidator } = require("./../validation");
  * @memberof module:controllers/gamesController
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
- * 
+ *
  */
 exports.getGameCards = catchAsync(async (req, res, next) => {
   //Get Random Cards using user id
@@ -63,7 +63,7 @@ exports.saveGameStats = catchAsync(async (req, res, next) => {
   );
 
   console.log(intersection);
-  if (intersection) {
+  if (intersection.size != 0) {
     return res.status(200).json({
       status: "success",
       message: "invalid input: some cards are correct and wrong",
@@ -121,7 +121,7 @@ exports.saveGameStats = catchAsync(async (req, res, next) => {
   );
   return res.status(201).json({
     status: "success",
-    message: "game history added successfully !!",
+    message: "Game stats saved successfully !!",
   });
   //Create new Game History
 
@@ -173,15 +173,15 @@ exports.getFailedCards = catchAsync(async (req, res, next) => {
   wrongAnswers.gameHistory.map((card) => {
     failedGames = failedGames.concat(card.wrongAnswers);
   });
-
-  res.json({ data: [...new Set(failedGames)] });
+  const data = [...new Set(failedGames)];
+  res.json({ status: "success", length: data.length, data });
 });
 
 /**
  * Update game history
  */
 
-exports.updateGameStats = catchAsync(async (req, res, next) => {});
+// exports.updateGameStats = catchAsync(async (req, res, next) => {});
 
 /**
  * Route to display user wrong cards history

@@ -2,13 +2,13 @@ exports.options = {
 	definition: {
 		openapi: "3.0.0",
 		info: {
-			title: "Library API",
+			title: "Memofy API",
 			version: "1.0.0",
-			description: "A simple Express Library API",
+			description: "Flash cards api",
 		},
 		servers: [
 			{
-				url: `http://localhost:${process.env.PORT}/api/v1`,
+				url: process.env.BASE_URI,
 			},
 		],
 	},
