@@ -78,7 +78,7 @@ const signupUser = catchAsync(async (req, res, next) => {
   });
   return res.json({
     status: "success",
-    message: "user is saved successfully please verify your account",
+    message: "user is saved successfully please check your inbox to verify your account",
   });
 });
 
@@ -390,7 +390,7 @@ const verifyAccount = catchAsync(async (req, res) => {
       isVerified: true,
     },
   });
-  return res.redirect("/users/login");
+  return res.json({ message: "account verified successfully now just login" });
 });
 
 /**
