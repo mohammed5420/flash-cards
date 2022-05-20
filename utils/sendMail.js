@@ -22,10 +22,7 @@ exports.sendEmailMessage = async (message) => {
   });
 
   // send mail with defined transport object
-  const messageUrl =
-    process.env.NODE_ENV === "development"
-      ? `http://localhost:${process.env.PORT}/api/v1/users/${message.url}/${message.userID}`
-      : "";
+  const messageUrl = `${process.env.BASE_URI}users/${message.url}/${message.userID}`;
   const templatePath = path.join(
     __dirname,
     `../templates/${
