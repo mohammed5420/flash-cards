@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=development&& docker compose start && nodemon server.js",
-    "start:prod": "SET NODE_ENV=production&& docker compose start && nodemon server.js",
+    "start": "SET NODE_ENV=development&& nodemon server.js",
+    "start:prod": "SET NODE_ENV=production&& nodemon server.js",
     "test": "jest",
     "generate-docs": "jsdoc -c jsdocConf.json"
   },
