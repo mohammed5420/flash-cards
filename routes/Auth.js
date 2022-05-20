@@ -326,7 +326,7 @@ routes.post(
 /**
  * @swagger
  * /delete:
- *   get:
+ *   delete:
  *     summary: Delete user account
  *     tags: [User]
  *     requestBody:
@@ -360,7 +360,7 @@ routes.post(
  *         description: Some server error
  */
 
-routes.get("/delete", verifyToken, usersController.deleteUserAccount);
+routes.delete("/delete", verifyToken, usersController.deleteUserAccount);
 
 /**
  * @swagger
