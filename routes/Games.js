@@ -55,7 +55,7 @@ const route = require("express").Router();
 
 /**
  * @swagger
- * /qa:
+ * /flashcards/games/qa:
  *   get:
  *     summary: Get game's cards
  *     parameters:
@@ -106,7 +106,7 @@ const route = require("express").Router();
 route.get("/qa", gamesController.getGameCards);
 /**
  * @swagger
- * /qa:
+ * /flashcards/games/qa:
  *   post:
  *     summary: Receive game statistics
  *     tags: [Game]
@@ -157,7 +157,7 @@ route.get("/qa", gamesController.getGameCards);
 route.post("/qa", gamesController.saveGameStats);
 /**
  * @swagger
- * /qa/game-history:
+ * /flashcards/games/qa/game-history:
  *   get:
  *     summary: Stats about games history
  *     tags: [Game]
@@ -188,7 +188,7 @@ route.post("/qa", gamesController.saveGameStats);
 route.get("/qa/game-history", gamesController.getGameHistory);
 /**
  * @swagger
- * /qa/wrong-cards:
+ * /flashcards/games/qa/wrong-cards:
  *   get:
  *     summary: list of wrong flashcards
  *     tags: [Game]
@@ -233,7 +233,7 @@ route.get("/qa/game-history", gamesController.getGameHistory);
 route.get("/qa/wrong-cards", gamesController.getFailedCards);
 /**
  * @swagger
- * /qa/delete-history:
+ * /flashcards/games/qa/delete-history:
  *   delete:
  *     summary: Delete user games history
  *     tags: [Game]

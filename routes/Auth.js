@@ -56,7 +56,7 @@ const { imageResizer } = require("../middleware/imageResizer");
 
 /**
  * @swagger
- * /signup:
+ * /users/signup:
  *   post:
  *     summary: Create a new user
  *     tags: [User]
@@ -112,7 +112,7 @@ routes.post("/signup", usersController.signupUser);
 
 /**
  * @swagger
- * /login:
+ * /users/login:
  *   post:
  *     summary: Login users
  *     tags: [User]
@@ -178,7 +178,7 @@ routes.post("/login", usersController.loginUser);
 
 /**
  * @swagger
- * /username:
+ * /users/username:
  *   post:
  *     summary: Change user name
  *     tags: [User]
@@ -225,7 +225,7 @@ routes.post("/username", verifyToken, usersController.changeUserName);
 
 /**
  * @swagger
- * /forgetPassword:
+ * /users/forgetPassword:
  *   post:
  *     summary: Send reset password email
  *     tags: [User]
@@ -273,7 +273,7 @@ routes.post("/forgetPassword", usersController.forgetUserPassword);
 
 /**
  * @swagger
- * /updateprofile:
+ * /users/updateprofile:
  *   post:
  *     summary: Update user profile image
  *     consumes:
@@ -325,7 +325,7 @@ routes.post(
 
 /**
  * @swagger
- * /delete:
+ * /users/delete:
  *   delete:
  *     summary: Delete user account
  *     tags: [User]
@@ -364,7 +364,7 @@ routes.delete("/delete", verifyToken, usersController.deleteUserAccount);
 
 /**
  * @swagger
- * /verifyaccount/{userToken}:
+ * /users/verifyaccount/{userToken}:
  *   get:
  *     summary: Verify user account
  *     parameters:
@@ -411,7 +411,7 @@ routes.get("/verifyaccount/:userToken", usersController.verifyAccount);
 
 /**
  * @swagger
- * /resetpassword/{userToken}:
+ * /users/resetpassword/{userToken}:
  *   post:
  *     summary: Route reset account password
  *     parameters:

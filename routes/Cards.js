@@ -51,7 +51,7 @@ const routes = require("express").Router();
 
 /**
  * @swagger
- * /:
+ * /flashcards/:
  *   get:
  *     summary: get all flashcards
  *     parameters:
@@ -110,7 +110,7 @@ routes.get("/", flashcardsController.getAllFlashCards);
 
 /**
  * @swagger
- * /create:
+ * /flashcards/create:
  *   post:
  *     summary: Create a new flashcard
  *     tags: [Card]
@@ -169,7 +169,7 @@ routes.post("/create", flashcardsController.createFlashCard);
 
 /**
  * @swagger
- * /update/{cardID}:
+ * /flashcards/update/{cardID}:
  *   patch:
  *     summary: Update flashcard
  *     parameters:
@@ -220,7 +220,7 @@ routes.patch("/update/:cardID", flashcardsController.updateFlashCard);
 
 /**
  * @swagger
- * /delete/{cardID}:
+ * /flashcards/delete/{cardID}:
  *   delete:
  *     summary: Delete flashcard
  *     parameters:
@@ -266,7 +266,7 @@ routes.delete("/delete/:cardID", flashcardsController.deleteFlashCard);
 
 /**
  * @swagger
- * /favorite:
+ * /flashcards/favorite:
  *   get:
  *     summary: Get all favorite flashcards
  *     parameters:
