@@ -2,6 +2,6 @@
 
 A FlashCards API Build with Nodejs
 
-## Live Demo
+## Api Documentation
 
-[here](http://localhost:3300/api/v1)
+[here](https://memofy-flash-cards.herokuapp.com/api/v1/docs)
