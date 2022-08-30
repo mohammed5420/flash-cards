@@ -10,48 +10,48 @@ A FlashCards API Built with Nodejs and Expressjs
 
 - Clone the repo
   ```
-      git clone https://github.com/mohammed5420/flash-cards.git
+    git clone https://github.com/mohammed5420/flash-cards.git
   ```
-- Install all needed
+- Install all needed dependencies
   ```
-      cd flash-cards/
-      npm install
+    cd flash-cards/
+    npm install
   ```
 - Create `.env` file with these variables
 
   ```
-      APPLICATION_NAME=
+    APPLICATION_NAME=
 
-      BASE_URI=http://localhost:3300/api/v1/
+    BASE_URI=http://localhost:3300/api/v1/
 
-      CONNECTION_STRING=
+    CONNECTION_STRING=
 
-      EMAIL_ADDRESS=
+    EMAIL_ADDRESS=
 
-      SECRET_KEY=
+    SECRET_KEY=
 
-      SENDGRID_HOST=
+    SENDGRID_HOST=
 
-      SENDGRID_PASSWORD=
+    SENDGRID_PASSWORD=
 
-      SENDGRID_POST=
+    SENDGRID_POST=
 
-      SENDGRID_USERNAME=
+    SENDGRID_USERNAME=
 
-      VERIFY_SECRET_KEY=
+    VERIFY_SECRET_KEY=
   ```
 
 - Now run the project
   <!-- For Development -->
 
   ```
-      npm run start:dev
+    npm run start:dev
   ```
 
   <!-- For Production -->
 
   ```
-      npm run start:prod
+    npm run start:prod
   ```
 
 ## Features
