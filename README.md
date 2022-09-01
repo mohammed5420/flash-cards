@@ -4,7 +4,7 @@ A FlashCards API Built with Nodejs and Expressjs
 
 ## Swagger Documentation
 
-[here](https://flash-cards-production.up.railway.app/api/v1/docs)
+[here](https://memofyflashcards.herokuapp.com/api/v1/docs/)
 
 ## Quick Start
 
