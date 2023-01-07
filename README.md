@@ -4,7 +4,7 @@ A FlashCards API Built with Nodejs and Expressjs
 
 ## Swagger Documentation
 
-[here](flash-cards-production.up.railway.app/api/v1/docs/)
+[here](https://flash-cards-production.up.railway.app/api/v1/docs/)
 
 ## Quick Start
 
